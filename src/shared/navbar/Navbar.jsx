@@ -20,7 +20,7 @@ export default function Navbar() {
 			label: "Giriş Yap",
 			icon: "pi pi-sign-in",
 			command: () => {
-				navigate("/");
+				navigate("/login");
 			},
 		},
 		{

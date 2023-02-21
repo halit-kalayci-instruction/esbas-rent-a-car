@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import Navbar from './shared/navbar/Navbar';
 import Homepage from './shared/homepage/Homepage';
 import { Route, Routes } from 'react-router-dom';
+import LoginPage from './features/auth/login/LoginPage';
 //react-router-dom
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="homepage" element={<Homepage />} />
+        <Route path="login" element={<LoginPage />} />
       </Routes>
       <footer></footer>
     </div>

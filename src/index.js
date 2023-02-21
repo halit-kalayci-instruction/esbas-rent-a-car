@@ -13,6 +13,9 @@ root.render(
     </MemoryRouter>
   </React.StrictMode>
 );
+// CSR => Client Side Rendering
+// SSR => Server Side Rendering Next.JS
+//TODO: Parametreler ve SEO
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

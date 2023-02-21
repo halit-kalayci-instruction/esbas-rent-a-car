@@ -7,8 +7,6 @@ import * as Yup from "yup";
 
 export default function LoginPage() {
 	//TODO: Style
-	//TODO: Formik implementation
-	// Validation schema => YUP
 	//TODO: Service implementation (HTTP REQUEST) axios
 	//TODO: Response handling
 

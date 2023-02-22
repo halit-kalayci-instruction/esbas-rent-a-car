@@ -6,15 +6,17 @@ import {Button} from "primereact/button";
 import * as Yup from "yup";
 import {Card} from "primereact/card";
 import {Link} from "react-router-dom";
+import LoginService from "../services/loginService";
 export default function LoginPage() {
-	//TODO: Style
-	//TODO: Service implementation (HTTP REQUEST) axios
 	//TODO: Response handling
+	//TODO: Show/Hide password
 
 	// initial values => {email:'', password:''}
 	// validation schema => yup validation schema
 	// onSubmit
 	// NEXT.JS
+	//JSX => /klasor_adi/dosya_adi.png  => public/
+
 	const initialUserCredentials = {email: "", password: ""};
 	const loginFormValidationSchema = Yup.object().shape({
 		email: Yup.string().required("Email girmek zorunludur."),
@@ -22,43 +24,44 @@ export default function LoginPage() {
 			.required("Şifre zorunludur.")
 			.min(3, "Şifre minimum 3 haneli olmalıdır."),
 	});
-	//JSX => /klasor_adi/dosya_adi.png  => public/
+	const onFormSubmit = values => {
+		let loginService = new LoginService();
+		loginService
+			.login(values)
+			.then(response => {
+				console.log(response);
+			})
+			.catch(error => {
+				console.error(error);
+			});
+	};
 	return (
 		<div className="login-background">
 			<div className="row m-0 content  align-items-center">
-				<div className="col-4"></div>
-				<div className="col-3">
+				<div className="col-md-4 col-0"></div>
+				<div className="col-md-3 col-12">
 					<Card>
 						<h2 className="text-center">Giriş Yap</h2>
 						<Formik
 							initialValues={initialUserCredentials}
 							validationSchema={loginFormValidationSchema}
 							onSubmit={values => {
-								// kullanıcı butona bastı..
-								console.log(values);
+								onFormSubmit(values);
 							}}
 						>
 							<Form>
 								<div className="row">
 									<div className="col-12 my-2">
 										<label>E-mail</label>
-										{/* <InputText name="email" placeholder="E-mail" /> */}
+
 										<Field className="form-control" name="email" type="email" />
 										<div>
-											<ErrorMessage name="email">
-												{message => (
-													<div className="text-danger">HATA: {message}</div>
-												)}
-											</ErrorMessage>
+											<ErrorMessage name="email"></ErrorMessage>
 										</div>
 									</div>
 									<div className="col-12 my-2">
 										<label>Password</label>
-										{/* <InputText
-								name="password"
-								placeholder="Password"
-								type="password"
-							/> */}
+
 										<Field
 											className="form-control"
 											name="password"

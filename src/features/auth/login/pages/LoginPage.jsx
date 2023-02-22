@@ -5,10 +5,11 @@ import {Formik, Form, Field, ErrorMessage} from "formik";
 import {Button} from "primereact/button";
 import * as Yup from "yup";
 import {Card} from "primereact/card";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import LoginService from "../services/loginService";
+import toastr from "toastr";
+import {setItem} from "../../../../core/utils/localStorage";
 export default function LoginPage() {
-	//TODO: Response handling
 	//TODO: Show/Hide password
 
 	// initial values => {email:'', password:''}
@@ -16,7 +17,7 @@ export default function LoginPage() {
 	// onSubmit
 	// NEXT.JS
 	//JSX => /klasor_adi/dosya_adi.png  => public/
-
+	const navigate = useNavigate();
 	const initialUserCredentials = {email: "", password: ""};
 	const loginFormValidationSchema = Yup.object().shape({
 		email: Yup.string().required("Email girmek zorunludur."),
@@ -29,9 +30,12 @@ export default function LoginPage() {
 		loginService
 			.login(values)
 			.then(response => {
-				console.log(response);
+				setItem("token", response.data.accessToken.token);
+				navigate("/homepage");
 			})
 			.catch(error => {
+				//TODO: Handle all error types in interceptor
+				toastr.error(error.response.data.Detail);
 				console.error(error);
 			});
 	};

@@ -1,6 +1,6 @@
-import axios from "axios";
 import { BASE_API_URL } from "../../../../enviroment";
-import { getItem } from "../../../../core/utils/localStorage";
+import instance from "../../../../core/utils/axiosInterceptors";
+import axios from "axios";
 
 export default class LoginService {
     // axios

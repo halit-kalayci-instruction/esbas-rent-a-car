@@ -2,12 +2,21 @@
 //class
 //react hook
 
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Menubar} from "primereact/menubar";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 export default function Navbar() {
 	const navigate = useNavigate();
+	const {pathname} = useLocation();
+	const hideNavbarRoutes = ["/login", "/register"];
+	const [showNavbar, setShowNavbar] = useState(true);
+
+	useEffect(() => {
+		let showNavbar = !hideNavbarRoutes.includes(pathname);
+		setShowNavbar(showNavbar);
+	}, [pathname]);
+
 	const menuItems = [
 		{
 			label: "Ana Sayfa",
@@ -29,9 +38,5 @@ export default function Navbar() {
 			command: () => {},
 		},
 	];
-	return (
-		<div>
-			<Menubar model={menuItems} />
-		</div>
-	);
+	return <div>{showNavbar && <Menubar model={menuItems} />}</div>;
 }

@@ -25,7 +25,8 @@ export default function LoginPage() {
 	//JSX => /klasor_adi/dosya_adi.png  => public/
 	return (
 		<div className="login-background">
-			<div className="row m-0 content justify-content-center align-items-center">
+			<div className="row m-0 content  align-items-center">
+				<div className="col-4"></div>
 				<div className="col-3">
 					<Card>
 						<h2 className="text-center">Giriş Yap</h2>
@@ -80,7 +81,7 @@ export default function LoginPage() {
 						</Formik>
 						<div className="w-100 text-center">
 							<p>
-								Don't have acoount?
+								Don't have account?
 								<Link to={"/register"}> Sign Up</Link>
 							</p>
 						</div>

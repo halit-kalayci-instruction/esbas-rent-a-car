@@ -5,7 +5,7 @@ import "primeicons/primeicons.css";
 import "bootstrap/dist/css/bootstrap.min.css"
 import "toastr/build/toastr.min.css";
 import Navbar from './shared/components/navbar/Navbar';
-import Homepage from './shared/homepage/Homepage';
+import Homepage from './shared/pages/homepage/Homepage';
 import { Route, Routes } from 'react-router-dom';
 import LoginPage from './features/auth/login/pages/LoginPage';
 //react-router-dom

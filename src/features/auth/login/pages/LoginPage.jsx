@@ -11,8 +11,6 @@ import toastr from "toastr";
 import {setItem} from "../../../../core/utils/localStorage";
 import BaseInput from "../../../../shared/components/form-elements/base-input/BaseInput";
 export default function LoginPage() {
-	//TODO: Show/Hide password
-
 	// initial values => {email:'', password:''}
 	// validation schema => yup validation schema
 	// onSubmit
@@ -28,17 +26,10 @@ export default function LoginPage() {
 	});
 	const onFormSubmit = values => {
 		let loginService = new LoginService();
-		loginService
-			.login(values)
-			.then(response => {
-				setItem("token", response.data.accessToken.token);
-				navigate("/homepage");
-			})
-			.catch(error => {
-				//TODO: Handle all error types in interceptor
-				toastr.error(error.response.data.Detail);
-				console.error(error);
-			});
+		loginService.login(values).then(response => {
+			setItem("token", response.data.accessToken.token);
+			navigate("/homepage");
+		});
 	};
 	const [showPassword, setShowPassword] = useState(false);
 	return (

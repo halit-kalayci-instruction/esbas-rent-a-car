@@ -5,7 +5,7 @@ import axios from "axios";
 export default class LoginService {
     // axios
     login(credentials) {
-        return axios
+        return instance
             .post(BASE_API_URL + "Auth/Login", credentials);
     }
 }

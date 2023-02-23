@@ -9,6 +9,7 @@ import {Link, useNavigate} from "react-router-dom";
 import LoginService from "../services/loginService";
 import toastr from "toastr";
 import {setItem} from "../../../../core/utils/localStorage";
+import BaseInput from "../../../../shared/components/form-elements/base-input/BaseInput";
 export default function LoginPage() {
 	//TODO: Show/Hide password
 
@@ -56,25 +57,14 @@ export default function LoginPage() {
 							<Form>
 								<div className="row">
 									<div className="col-12 my-2">
-										<label>E-mail</label>
-
-										<Field className="form-control" name="email" type="email" />
-										<div>
-											<ErrorMessage name="email"></ErrorMessage>
-										</div>
+										<BaseInput label="E-mail" name="email" type="email" />
 									</div>
 									<div className="col-12 my-2">
-										<label>Password</label>
-
-										<Field
-											className="form-control"
+										<BaseInput
+											label="Password"
 											name="password"
 											type="password"
 										/>
-										<ErrorMessage
-											className="text-danger"
-											name="password"
-										></ErrorMessage>
 									</div>
 									<div className="col-12 my-2">
 										<Button

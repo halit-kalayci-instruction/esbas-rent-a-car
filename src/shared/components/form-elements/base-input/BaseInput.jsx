@@ -1,15 +1,18 @@
 import {ErrorMessage, Field} from "formik";
 import React from "react";
-
+import "./BaseInput.scss";
 export default function BaseInput(props) {
 	//TODO: Icon?
 	return (
-		<React.Fragment>
+		<>
 			<label>{props.label}</label>
-			<Field className="form-control" name={props.name} type={props.type} />
+			<div className="d-flex justify-content-center flex-direction-row position-relative">
+				<Field className="form-control" name={props.name} type={props.type} />
+				{props.icon && <i className={"input-icon pi " + props.icon}></i>}
+			</div>
 			<ErrorMessage name={props.name}>
 				{msg => <div className="text-danger">{msg}</div>}
 			</ErrorMessage>
-		</React.Fragment>
+		</>
 	);
 }

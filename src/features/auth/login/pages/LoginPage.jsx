@@ -64,6 +64,7 @@ export default function LoginPage() {
 											label="Password"
 											name="password"
 											type="password"
+											icon="pi-eye"
 										/>
 									</div>
 									<div className="col-12 my-2">

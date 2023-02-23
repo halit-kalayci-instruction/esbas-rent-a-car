@@ -49,7 +49,7 @@ export default function LoginPage() {
 							<Form>
 								<div className="row">
 									<div className="col-12 my-2">
-										<BaseInput label="E-mail" name="email" type="email" />
+										<BaseInput label="E-mail" name="email" type="text" />
 									</div>
 									<div className="col-12 my-2">
 										<BaseInput

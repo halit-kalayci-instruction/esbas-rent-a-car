@@ -4,7 +4,7 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "bootstrap/dist/css/bootstrap.min.css"
 import "toastr/build/toastr.min.css";
-import Navbar from './shared/navbar/Navbar';
+import Navbar from './shared/components/navbar/Navbar';
 import Homepage from './shared/homepage/Homepage';
 import { Route, Routes } from 'react-router-dom';
 import LoginPage from './features/auth/login/pages/LoginPage';

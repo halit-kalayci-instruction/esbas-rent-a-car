@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./LoginPage.scss";
 import {InputText} from "primereact/inputtext";
 import {Formik, Form, Field, ErrorMessage} from "formik";
@@ -40,6 +40,7 @@ export default function LoginPage() {
 				console.error(error);
 			});
 	};
+	const [showPassword, setShowPassword] = useState(false);
 	return (
 		<div className="login-background">
 			<div className="row m-0 content  align-items-center">
@@ -63,8 +64,11 @@ export default function LoginPage() {
 										<BaseInput
 											label="Password"
 											name="password"
-											type="password"
-											icon="pi-eye"
+											type={showPassword ? "text" : "password"}
+											icon={showPassword ? "pi-eye-slash" : "pi-eye"}
+											onIconClick={() => {
+												setShowPassword(!showPassword);
+											}}
 										/>
 									</div>
 									<div className="col-12 my-2">

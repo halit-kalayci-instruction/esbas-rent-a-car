@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import CarCard from "../../../features/car/components/car-card/CarCard";
 import CarService from "../../../features/car/services/carService";
 import "./Homepage.scss";
+import {LoaderContext} from "../../contexts/LoaderContext";
 
 export default function Homepage() {
 	//TODO: Pagination

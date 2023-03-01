@@ -15,7 +15,7 @@ export default function authReducer(state = authState, { type, payload }) {
 
             let firstValue = { authenticated: false, user: null };
             // YENİ STATEI RETURN ET!
-            return { authenticated: true, user: { name: "halit", email: "halit@kodlama.io" } }
+            return { authenticated: true, user: payload }
         default:
             return state;
     }

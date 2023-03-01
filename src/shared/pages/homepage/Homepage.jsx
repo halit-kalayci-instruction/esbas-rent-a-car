@@ -5,14 +5,15 @@ import "./Homepage.scss";
 import {LoaderContext} from "../../contexts/LoaderContext";
 import Pagination from "../../components/pagination/Pagination";
 import BrandService from "../../../features/brand/services/brandService";
+import {useDispatch} from "react-redux";
+import {Login} from "../../../store/actions/authActions";
 
 export default function Homepage() {
 	// Redux
 	const [data, setData] = useState({});
-	const [brandData, setbrandData] = useState({});
+	const dispatch = useDispatch();
 	useEffect(() => {
 		fetchCarData();
-		fetchBrandData();
 	}, []);
 	// Circular Hook Call
 
@@ -25,16 +26,14 @@ export default function Homepage() {
 		});
 	};
 
-	const fetchBrandData = () => {
-		let brandService = new BrandService();
-		brandService.getAll().then(response => {
-			console.log("Marka bilgileri getirildi: ", response);
-			setbrandData(response.data);
-		});
-	};
-
 	const setPage = page => {
 		fetchCarData(page);
+	};
+
+	const changeStateOnRedux = () => {
+		//Redux aksiyonları nasıl çağrılır?
+		//dispatch
+		dispatch(Login({name: "deneme", email: "123"}));
 	};
 
 	return (
@@ -46,12 +45,6 @@ export default function Homepage() {
 					</div>
 				))}
 			</div>
-			{brandData?.items?.map(brand => (
-				<div>
-					<p>{brand.name}</p>
-				</div>
-			))}
-
 			<Pagination
 				hasPrevious={data.hasPrevious}
 				hasNext={data.hasNext}
@@ -59,6 +52,15 @@ export default function Homepage() {
 				index={data.index}
 				onPageChange={setPage}
 			></Pagination>
+
+			<button
+				onClick={() => {
+					changeStateOnRedux();
+				}}
+				className="btn btn-danger"
+			>
+				Auth State'i Değiştir
+			</button>
 		</div>
 	);
 }

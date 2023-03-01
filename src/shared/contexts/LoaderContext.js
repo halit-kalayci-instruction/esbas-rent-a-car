@@ -17,7 +17,6 @@ export const LoaderProvider = ({ children }) => {
     // A => true => 5 sn => 3sn
     // B => true => 2 sn => false
     // C => true => 5 sn => 3sn
-    // TODO
 
     const setLoadingByRequestCount = () => {
         if (requestCount > 0) {

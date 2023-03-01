@@ -4,14 +4,15 @@ import CarService from "../../../features/car/services/carService";
 import "./Homepage.scss";
 import {LoaderContext} from "../../contexts/LoaderContext";
 import Pagination from "../../components/pagination/Pagination";
+import BrandService from "../../../features/brand/services/brandService";
 
 export default function Homepage() {
-	//TODO: Pagination
 	// Redux
 	const [data, setData] = useState({});
+	const [brandData, setbrandData] = useState({});
 	useEffect(() => {
-		// Backendden araba bilgilerini getirme
 		fetchCarData();
+		fetchBrandData();
 	}, []);
 	// Circular Hook Call
 
@@ -19,7 +20,16 @@ export default function Homepage() {
 	const fetchCarData = (page = 0) => {
 		let carService = new CarService();
 		carService.getAll(page, 1).then(response => {
+			console.log("Araba bilgileri getirildi: " + response);
 			setData(response.data);
+		});
+	};
+
+	const fetchBrandData = () => {
+		let brandService = new BrandService();
+		brandService.getAll().then(response => {
+			console.log("Marka bilgileri getirildi: ", response);
+			setbrandData(response.data);
 		});
 	};
 
@@ -36,6 +46,12 @@ export default function Homepage() {
 					</div>
 				))}
 			</div>
+			{brandData?.items?.map(brand => (
+				<div>
+					<p>{brand.name}</p>
+				</div>
+			))}
+
 			<Pagination
 				hasPrevious={data.hasPrevious}
 				hasNext={data.hasNext}

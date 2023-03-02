@@ -5,6 +5,7 @@ import "./Homepage.scss";
 import Pagination from "../../components/pagination/Pagination";
 import {useDispatch} from "react-redux";
 import {getAllCars, getAllCarsAsync} from "../../../store/actions/carActions";
+import BrandService from "../../../features/brand/services/brandService";
 
 export default function Homepage() {
 	// Redux
@@ -13,15 +14,21 @@ export default function Homepage() {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		fetchCarData();
+		//fetchBrandData();
 	}, [pageSize]);
 	// Circular Hook Call
 
-	//TODO: User select for page size
 	const fetchCarData = (page = 0) => {
 		let carService = new CarService();
 		carService.getAll(page, pageSize).then(response => {
 			console.log("Araba bilgileri getirildi: " + response);
 			setData(response.data);
+		});
+	};
+	const fetchBrandData = () => {
+		let brandService = new BrandService();
+		brandService.getAll().then(response => {
+			console.log("brandservice");
 		});
 	};
 

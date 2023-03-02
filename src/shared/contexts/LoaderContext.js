@@ -32,13 +32,15 @@ export const LoaderProvider = ({ children }) => {
             requestCount--;
     }
 
-    const increaseRequestCount = () => {
-        //TODO: Special requests that wont affect loading state..
+    const increaseRequestCount = (config) => {
+        if (config.headers["X-Disable-Interceptor"] && config.headers["X-Disable-Interceptor"] == 'true') {
+            return;
+        }
         requestCount++;
     }
 
     instance.interceptors.request.use((config) => {
-        increaseRequestCount();
+        increaseRequestCount(config);
         setLoadingByRequestCount();
         return config;
     });

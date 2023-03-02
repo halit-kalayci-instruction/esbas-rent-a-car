@@ -5,11 +5,13 @@
 import React, {useEffect, useState} from "react";
 import {Menubar} from "primereact/menubar";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {removeItem} from "../../../core/utils/localStorage";
+import {Logout} from "../../../store/actions/authActions";
 
 export default function Navbar() {
 	const authState = useSelector(state => state.auth);
-
+	const dispatch = useDispatch();
 	const menuItems = [
 		{
 			label: "Ana Sayfa",
@@ -36,9 +38,19 @@ export default function Navbar() {
 			label: "Çıkış Yap",
 			icon: "pi pi-user-minus",
 			visible: authState.authenticated,
-			command: () => {},
+			command: () => {
+				// localstorage temizlemek
+				// reduxdaki state'i düzenlemek
+				// login page redirect UX
+				handleLogout();
+			},
 		},
 	];
+	const handleLogout = () => {
+		removeItem("token");
+		dispatch(Logout());
+		navigate("/login");
+	};
 	const navigate = useNavigate();
 	const {pathname} = useLocation();
 	const hideNavbarRoutes = ["/login", "/register"];

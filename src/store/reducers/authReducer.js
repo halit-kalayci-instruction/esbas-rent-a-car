@@ -1,4 +1,4 @@
-import { USER_LOGIN } from "../constants/authConstants";
+import { USER_LOGIN, USER_LOGOUT } from "../constants/authConstants";
 import { authState } from "../initialValues/authState";
 
 
@@ -16,6 +16,8 @@ export default function authReducer(state = authState, { type, payload }) {
             let firstValue = { authenticated: false, user: null };
             // YENİ STATEI RETURN ET!
             return { authenticated: true, user: payload }
+        case USER_LOGOUT:
+            return authState;
         default:
             return state;
     }

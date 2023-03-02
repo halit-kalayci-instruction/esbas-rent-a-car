@@ -4,7 +4,7 @@ import CarService from "../../../features/car/services/carService";
 import "./Homepage.scss";
 import Pagination from "../../components/pagination/Pagination";
 import {useDispatch} from "react-redux";
-import {getAllCars} from "../../../store/actions/carActions";
+import {getAllCars, getAllCarsAsync} from "../../../store/actions/carActions";
 
 export default function Homepage() {
 	// Redux
@@ -12,6 +12,7 @@ export default function Homepage() {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		fetchCarData();
+		dispatch(getAllCarsAsync());
 	}, []);
 	// Circular Hook Call
 
@@ -21,7 +22,6 @@ export default function Homepage() {
 		carService.getAll(page, 1).then(response => {
 			console.log("Araba bilgileri getirildi: " + response);
 			setData(response.data);
-			dispatch(getAllCars(response.data));
 		});
 	};
 

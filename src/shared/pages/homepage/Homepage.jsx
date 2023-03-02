@@ -9,17 +9,17 @@ import {getAllCars, getAllCarsAsync} from "../../../store/actions/carActions";
 export default function Homepage() {
 	// Redux
 	const [data, setData] = useState({});
+	const [pageSize, setpageSize] = useState(1);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		fetchCarData();
-		dispatch(getAllCarsAsync());
-	}, []);
+	}, [pageSize]);
 	// Circular Hook Call
 
 	//TODO: User select for page size
 	const fetchCarData = (page = 0) => {
 		let carService = new CarService();
-		carService.getAll(page, 1).then(response => {
+		carService.getAll(page, pageSize).then(response => {
 			console.log("Araba bilgileri getirildi: " + response);
 			setData(response.data);
 		});
@@ -27,6 +27,9 @@ export default function Homepage() {
 
 	const setPage = page => {
 		fetchCarData(page);
+	};
+	const setPageSize = pageSize => {
+		setpageSize(+pageSize);
 	};
 
 	return (
@@ -44,6 +47,7 @@ export default function Homepage() {
 				pages={data.pages}
 				index={data.index}
 				onPageChange={setPage}
+				onPageSizeChange={setPageSize}
 			></Pagination>
 		</div>
 	);

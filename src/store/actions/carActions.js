@@ -8,7 +8,6 @@ export function getAllCars(cars) {
     }
 }
 
-//TODO: Redux ile async işlemler
 // thunk redux-thunk
 export function getAllCarsAsync() {
     // async

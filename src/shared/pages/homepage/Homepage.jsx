@@ -3,10 +3,13 @@ import CarCard from "../../../features/car/components/car-card/CarCard";
 import CarService from "../../../features/car/services/carService";
 import "./Homepage.scss";
 import Pagination from "../../components/pagination/Pagination";
+import {useDispatch} from "react-redux";
+import {getAllCars} from "../../../store/actions/carActions";
 
 export default function Homepage() {
 	// Redux
 	const [data, setData] = useState({});
+	const dispatch = useDispatch();
 	useEffect(() => {
 		fetchCarData();
 	}, []);
@@ -18,6 +21,7 @@ export default function Homepage() {
 		carService.getAll(page, 1).then(response => {
 			console.log("Araba bilgileri getirildi: " + response);
 			setData(response.data);
+			dispatch(getAllCars(response.data));
 		});
 	};
 

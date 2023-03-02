@@ -5,8 +5,11 @@
 import React, {useEffect, useState} from "react";
 import {Menubar} from "primereact/menubar";
 import {useLocation, useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 export default function Navbar() {
+	const authState = useSelector(state => state.auth);
+
 	const menuItems = [
 		{
 			label: "Ana Sayfa",
@@ -18,6 +21,7 @@ export default function Navbar() {
 		{
 			label: "Giriş Yap",
 			icon: "pi pi-sign-in",
+			visible: !authState.authenticated,
 			command: () => {
 				navigate("/login");
 			},
@@ -25,10 +29,16 @@ export default function Navbar() {
 		{
 			label: "Kayıt Ol",
 			icon: "pi pi-user-plus",
+			visible: !authState.authenticated,
+			command: () => {},
+		},
+		{
+			label: "Çıkış Yap",
+			icon: "pi pi-user-minus",
+			visible: authState.authenticated,
 			command: () => {},
 		},
 	];
-
 	const navigate = useNavigate();
 	const {pathname} = useLocation();
 	const hideNavbarRoutes = ["/login", "/register"];

@@ -1,17 +1,12 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import CarCard from "../../../features/car/components/car-card/CarCard";
 import CarService from "../../../features/car/services/carService";
 import "./Homepage.scss";
-import {LoaderContext} from "../../contexts/LoaderContext";
 import Pagination from "../../components/pagination/Pagination";
-import BrandService from "../../../features/brand/services/brandService";
-import {useDispatch} from "react-redux";
-import {Login} from "../../../store/actions/authActions";
 
 export default function Homepage() {
 	// Redux
 	const [data, setData] = useState({});
-	const dispatch = useDispatch();
 	useEffect(() => {
 		fetchCarData();
 	}, []);
@@ -30,12 +25,6 @@ export default function Homepage() {
 		fetchCarData(page);
 	};
 
-	const changeStateOnRedux = () => {
-		//Redux aksiyonları nasıl çağrılır?
-		//dispatch
-		dispatch(Login({name: "deneme", email: "123"}));
-	};
-
 	return (
 		<div className="container">
 			<div className="row mt-3">
@@ -52,15 +41,6 @@ export default function Homepage() {
 				index={data.index}
 				onPageChange={setPage}
 			></Pagination>
-
-			<button
-				onClick={() => {
-					changeStateOnRedux();
-				}}
-				className="btn btn-danger"
-			>
-				Auth State'i Değiştir
-			</button>
 		</div>
 	);
 }

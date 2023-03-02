@@ -1,15 +1,16 @@
 import React, {useState} from "react";
 import "./LoginPage.scss";
-import {InputText} from "primereact/inputtext";
-import {Formik, Form, Field, ErrorMessage} from "formik";
+import {Formik, Form} from "formik";
 import {Button} from "primereact/button";
 import * as Yup from "yup";
 import {Card} from "primereact/card";
 import {Link, useNavigate} from "react-router-dom";
 import LoginService from "../services/loginService";
-import toastr from "toastr";
 import {setItem} from "../../../../core/utils/localStorage";
 import BaseInput from "../../../../shared/components/form-elements/base-input/BaseInput";
+import {useDispatch} from "react-redux";
+import jwt_decode from "jwt-decode";
+import {Login} from "../../../../store/actions/authActions";
 export default function LoginPage() {
 	// initial values => {email:'', password:''}
 	// validation schema => yup validation schema
@@ -17,6 +18,7 @@ export default function LoginPage() {
 	// NEXT.JS
 	//JSX => /klasor_adi/dosya_adi.png  => public/
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const initialUserCredentials = {email: "", password: ""};
 	const loginFormValidationSchema = Yup.object().shape({
 		email: Yup.string().required("Email girmek zorunludur."),
@@ -28,6 +30,8 @@ export default function LoginPage() {
 		let loginService = new LoginService();
 		loginService.login(values).then(response => {
 			setItem("token", response.data.accessToken.token);
+			let userInfo = jwt_decode(response.data.accessToken.token);
+			dispatch(Login(userInfo));
 			navigate("/homepage");
 		});
 	};

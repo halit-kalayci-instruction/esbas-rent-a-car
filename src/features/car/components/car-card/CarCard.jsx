@@ -2,8 +2,11 @@ import React from "react";
 import {Card} from "primereact/card";
 import {Button} from "primereact/button";
 import {Divider} from "primereact/divider";
+import {useTranslation} from "react-i18next";
 export default function CarCard(props) {
+	const {t} = useTranslation();
 	//TODO: Add carousel.
+	//TODO: Dynamic translation
 	const header = (
 		<img
 			alt="Card"
@@ -12,7 +15,7 @@ export default function CarCard(props) {
 	);
 	const footer = (
 		<div className="w-100">
-			<Button className="w-100" label="Kirala" icon="pi pi-shopping-cart" />
+			<Button className="w-100" label={t("rent")} icon="pi pi-shopping-cart" />
 		</div>
 	);
 

@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from './store/configureStore';
-
+import './i18n'
 const store = configureStore();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

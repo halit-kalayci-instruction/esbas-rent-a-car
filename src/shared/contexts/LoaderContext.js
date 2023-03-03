@@ -9,6 +9,8 @@ export const useLoader = () => {
 }
 
 // Provider
+//TODO: Add Auth context
+//TODO: Multi-language
 export const LoaderProvider = ({ children }) => {
     let requestCount = 0;
     const [isLoading, setIsLoading] = useState(false);

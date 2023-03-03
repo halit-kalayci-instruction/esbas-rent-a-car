@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import "./Loader.scss";
 import {ProgressSpinner} from "primereact/progressspinner";
 import {useLoader} from "../../contexts/LoaderContext";
-export default function Loader() {
+export default function Loader(props) {
 	//LoaderContext
 	//useNavigate
 	//useLocation

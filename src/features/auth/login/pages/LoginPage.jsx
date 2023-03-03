@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import "./LoginPage.scss";
 import {Formik, Form} from "formik";
 import {Button} from "primereact/button";
@@ -11,6 +11,7 @@ import BaseInput from "../../../../shared/components/form-elements/base-input/Ba
 import {useDispatch} from "react-redux";
 import jwt_decode from "jwt-decode";
 import {Login} from "../../../../store/actions/authActions";
+import {AuthContext} from "../../../../shared/contexts/AuthContext";
 export default function LoginPage() {
 	// initial values => {email:'', password:''}
 	// validation schema => yup validation schema
@@ -19,6 +20,7 @@ export default function LoginPage() {
 	//JSX => /klasor_adi/dosya_adi.png  => public/
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const authContext = useContext(AuthContext);
 	const initialUserCredentials = {email: "", password: ""};
 	const loginFormValidationSchema = Yup.object().shape({
 		email: Yup.string().required("Email girmek zorunludur."),
@@ -31,7 +33,8 @@ export default function LoginPage() {
 		loginService.login(values).then(response => {
 			setItem("token", response.data.accessToken.token);
 			let userInfo = jwt_decode(response.data.accessToken.token);
-			dispatch(Login(userInfo));
+			// dispatch(Login(userInfo));
+			authContext.setAuthInformation({authenticated: true, user: userInfo});
 			navigate("/homepage");
 		});
 	};

@@ -10,23 +10,29 @@ import { Route, Routes } from 'react-router-dom';
 import LoginPage from './features/auth/login/pages/LoginPage';
 import { LoaderProvider } from './shared/contexts/LoaderContext';
 import Loader from './shared/components/loader/Loader';
+import { AuthProvider } from './shared/contexts/AuthContext';
 //react-router-dom
 
 // createContext, useContext
 function App() {
   return (
-    <LoaderProvider>
-      <div className="App">
-        <Loader></Loader>
-        <Navbar />
-        <Routes>
-          <Route path="" element={<Homepage />} />
-          <Route path="homepage" element={<Homepage />} />
-          <Route path="login" element={<LoginPage />} />
-        </Routes>
-        <footer></footer>
-      </div>
-    </LoaderProvider>
+    <AuthProvider>
+      <LoaderProvider>
+        <div className="App">
+          <Loader>
+          </Loader>
+          <Navbar />
+          <Routes>
+            <Route path="" element={<Homepage />} />
+
+            <Route path="homepage" element={<Homepage />} />
+
+            <Route path="login" element={<LoginPage />} />
+          </Routes>
+          <footer></footer>
+        </div>
+      </LoaderProvider>
+    </AuthProvider>
   );
 }
 

@@ -1,4 +1,10 @@
 {
 	"welcomeText": "Hello, welcome",
-	"greetings": "Hi"
+	"greetings": "Hi",
+	"homepage": "Homepage",
+	"login": "Login",
+	"register": "Register",
+	"logout": "Logout",
+	"previous": "Previous",
+	"next": "Next"
 }

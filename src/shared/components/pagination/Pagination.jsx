@@ -1,6 +1,8 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 export default function Pagination(props) {
+	const {t} = useTranslation();
 	return (
 		<div className="row">
 			<div className="col-3">
@@ -14,7 +16,7 @@ export default function Pagination(props) {
 									}}
 									className="page-link"
 								>
-									Previous
+									{t("previous")}
 								</a>
 							</li>
 						)}
@@ -42,7 +44,7 @@ export default function Pagination(props) {
 									}}
 									className="page-link"
 								>
-									Next
+									{t("next")}
 								</a>
 							</li>
 						)}

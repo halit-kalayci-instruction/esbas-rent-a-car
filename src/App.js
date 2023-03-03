@@ -11,23 +11,14 @@ import LoginPage from './features/auth/login/pages/LoginPage';
 import { LoaderProvider } from './shared/contexts/LoaderContext';
 import Loader from './shared/components/loader/Loader';
 import { AuthProvider } from './shared/contexts/AuthContext';
-import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
 //react-router-dom
 
 // createContext, useContext
 function App() {
-  const { t, i18n } = useTranslation();
-
-  useEffect(() => {
-    console.log(i18n);
-  }, []);
-
   return (
     <AuthProvider>
       <LoaderProvider>
         <div className="App">
-          <p>{t('welcomeText')}</p>
           <Loader>
           </Loader>
           <Navbar />

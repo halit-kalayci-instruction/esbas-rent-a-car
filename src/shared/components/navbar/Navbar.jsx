@@ -9,21 +9,23 @@ import {useDispatch, useSelector} from "react-redux";
 import {removeItem} from "../../../core/utils/localStorage";
 import {Logout} from "../../../store/actions/authActions";
 import {AuthContext} from "../../contexts/AuthContext";
+import {useTranslation} from "react-i18next";
 
 export default function Navbar() {
 	const authState = useSelector(state => state.auth);
 	const authContext = useContext(AuthContext);
 	const dispatch = useDispatch();
+	const {t, i18n} = useTranslation();
 	const menuItems = [
 		{
-			label: "Ana Sayfa",
+			label: t("homepage"),
 			icon: "pi pi-home",
 			command: () => {
 				navigate("/homepage");
 			},
 		},
 		{
-			label: "Giriş Yap",
+			label: t("login"),
 			icon: "pi pi-sign-in",
 			visible: !authContext.authInformation.authenticated,
 			command: () => {
@@ -31,13 +33,13 @@ export default function Navbar() {
 			},
 		},
 		{
-			label: "Kayıt Ol",
+			label: t("register"),
 			icon: "pi pi-user-plus",
 			visible: !authContext.authInformation.authenticated,
 			command: () => {},
 		},
 		{
-			label: "Çıkış Yap",
+			label: t("logout"),
 			icon: "pi pi-user-minus",
 			visible: authContext.authInformation.authenticated,
 			command: () => {
@@ -46,6 +48,26 @@ export default function Navbar() {
 				// login page redirect UX
 				handleLogout();
 			},
+		},
+		{
+			label: i18n.resolvedLanguage == "en" ? "English" : "Türkçe",
+			icon: "pi pi-language",
+			items: [
+				{
+					label: "Türkçe",
+					icon: "",
+					command: () => {
+						i18n.changeLanguage("tr");
+					},
+				},
+				{
+					label: "English",
+					icon: "",
+					command: () => {
+						i18n.changeLanguage("en");
+					},
+				},
+			],
 		},
 	];
 	const handleLogout = () => {
@@ -64,7 +86,7 @@ export default function Navbar() {
 	useEffect(() => {
 		let showNavbar = !hideNavbarRoutes.includes(pathname);
 		setShowNavbar(showNavbar);
-		console.log(authContext);
+		console.log(i18n);
 	}, [pathname]);
 
 	return <div>{showNavbar && <Menubar model={menuItems} />}</div>;

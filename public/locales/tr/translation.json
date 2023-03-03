@@ -1,4 +1,10 @@
 {
 	"welcomeText": "Merhabalar, hoş geldiniz",
-	"greetings": "Merhaba"
+	"greetings": "Merhaba",
+	"homepage": "Ana Sayfa",
+	"login": "Giriş Yap",
+	"register": "Kayıt Ol",
+	"logout": "Çıkış Yap",
+	"previous": "Önceki",
+	"next": "Sonraki"
 }

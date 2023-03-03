@@ -7,7 +7,7 @@ i18n
     .use(Backend)
     .use(LanguageDetector)
     .init({
-        fallbackLng: 'tr'
+        fallbackLng: 'en'
     })
 
 export default i18n;

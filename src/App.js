@@ -27,7 +27,6 @@ function App() {
     <AuthProvider>
       <LoaderProvider>
         <div className="App">
-          <p>{t('welcomeText')}</p>
           <Loader>
           </Loader>
           <Navbar />

@@ -1,5 +1,5 @@
 {
-	"welcomeText": "Merhabalar %{name}, hoş geldiniz",
+	"welcomeText": "Merhabalar {{name}}, hoş geldiniz",
 	"greetings": "Merhaba",
 	"homepage": "Ana Sayfa",
 	"login": "Giriş Yap",

@@ -1,5 +1,5 @@
 {
-	"welcomeText": "Hello %{name}, welcome",
+	"welcomeText": "Hello {{name}}, welcome",
 	"greetings": "Hi",
 	"homepage": "Homepage",
 	"login": "Login",

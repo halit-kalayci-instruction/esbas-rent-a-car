@@ -18,7 +18,7 @@ export default function Navbar() {
 	const {t, i18n} = useTranslation();
 	const menuItems = [
 		{
-			label: t("homepage"),
+			label: t("Homepage"),
 			icon: "pi pi-home",
 			command: () => {
 				navigate("/homepage");
@@ -37,6 +37,11 @@ export default function Navbar() {
 			icon: "pi pi-user-plus",
 			visible: !authContext.authInformation.authenticated,
 			command: () => {},
+		},
+		{
+			label: t("welcomeText", {name: "Halit"}),
+			icon: "pi pi-user",
+			visible: authContext.authInformation.authenticated,
 		},
 		{
 			label: t("logout"),

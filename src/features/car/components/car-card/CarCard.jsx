@@ -20,8 +20,6 @@ export default function CarCard(props) {
 			<Button className="w-100" label={t("rent")} icon="pi pi-shopping-cart" />
 		</div>
 	);
-
-	//TODO: Backend'e image ve özellikler ekle.
 	return (
 		<div className="card flex justify-content-center">
 			<Card footer={footer} header={header} className="md:w-25rem">

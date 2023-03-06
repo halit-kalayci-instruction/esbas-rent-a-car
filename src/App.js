@@ -11,6 +11,7 @@ import LoginPage from './features/auth/login/pages/LoginPage';
 import { LoaderProvider } from './shared/contexts/LoaderContext';
 import Loader from './shared/components/loader/Loader';
 import { AuthProvider } from './shared/contexts/AuthContext';
+import AddCar from './features/admin/car/addCar/AddCar';
 //react-router-dom
 
 // createContext, useContext
@@ -24,10 +25,9 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="" element={<Homepage />} />
-
             <Route path="homepage" element={<Homepage />} />
-
             <Route path="login" element={<LoginPage />} />
+            <Route path="car/add" element={<AddCar />} />
           </Routes>
           <footer></footer>
         </div>

@@ -40,7 +40,9 @@ export default function Navbar() {
 		},
 		{
 			label: t("welcomeText", {
-				name: authContext.authInformation.user[NAME] ?? "Misafir",
+				name: authContext.authInformation?.user
+					? authContext.authInformation.user[NAME]
+					: "Misafir",
 			}),
 			icon: "pi pi-user",
 			visible: authContext.authInformation.authenticated,

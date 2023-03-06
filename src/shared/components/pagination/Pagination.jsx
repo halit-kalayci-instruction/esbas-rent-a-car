@@ -22,6 +22,7 @@ export default function Pagination(props) {
 						)}
 						{[...Array(props.pages)].map((page, index) => (
 							<li
+								key={index}
 								className={
 									"page-item " + (props.index == index ? "active" : "")
 								}

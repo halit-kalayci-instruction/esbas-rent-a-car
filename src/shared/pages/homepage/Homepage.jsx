@@ -43,7 +43,7 @@ export default function Homepage() {
 		<div className="container">
 			<div className="row mt-3">
 				{data?.items?.map(car => (
-					<div className="col-12 mb-2 col-md-3">
+					<div key={car.id} className="col-12 mb-2 col-md-3">
 						<CarCard car={car}></CarCard>
 					</div>
 				))}

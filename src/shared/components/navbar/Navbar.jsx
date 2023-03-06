@@ -10,9 +10,9 @@ import {removeItem} from "../../../core/utils/localStorage";
 import {Logout} from "../../../store/actions/authActions";
 import {AuthContext} from "../../contexts/AuthContext";
 import {useTranslation} from "react-i18next";
+import {NAME, NAME_ID} from "../../constants/claimConstants";
 
 export default function Navbar() {
-	const authState = useSelector(state => state.auth);
 	const authContext = useContext(AuthContext);
 	const dispatch = useDispatch();
 	const {t, i18n} = useTranslation();
@@ -39,7 +39,9 @@ export default function Navbar() {
 			command: () => {},
 		},
 		{
-			label: t("welcomeText", {name: "Halit"}),
+			label: t("welcomeText", {
+				name: authContext.authInformation.user[NAME] ?? "Misafir",
+			}),
 			icon: "pi pi-user",
 			visible: authContext.authInformation.authenticated,
 		},
@@ -91,7 +93,7 @@ export default function Navbar() {
 	useEffect(() => {
 		let showNavbar = !hideNavbarRoutes.includes(pathname);
 		setShowNavbar(showNavbar);
-		console.log(i18n);
+		console.log(authContext);
 	}, [pathname]);
 
 	return <div>{showNavbar && <Menubar model={menuItems} />}</div>;

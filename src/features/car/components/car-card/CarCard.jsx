@@ -6,7 +6,6 @@ import {useTranslation} from "react-i18next";
 export default function CarCard(props) {
 	const {t} = useTranslation();
 	//TODO: Add carousel.
-	//TODO: Dynamic translation
 	const header = (
 		<img
 			alt="Card"

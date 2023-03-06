@@ -9,7 +9,6 @@ export const useLoader = () => {
 }
 
 // Provider
-//TODO: Multi-language, Internationalization, I18N
 export const LoaderProvider = ({ children }) => {
     let requestCount = 0;
     const [isLoading, setIsLoading] = useState(false);

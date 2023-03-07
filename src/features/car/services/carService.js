@@ -8,4 +8,8 @@ export default class CarService {
     add(car) {
         return instance.post("Cars", car);
     }
+
+    delete(id) {
+        return instance.delete("Cars/" + id);
+    }
 }

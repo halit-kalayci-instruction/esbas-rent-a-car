@@ -6,7 +6,6 @@ import {Column} from "primereact/column";
 import CarService from "../../../car/services/carService";
 import Pagination from "../../../../shared/components/pagination/Pagination";
 function CarList() {
-	// O anki (sayfa) araba verilerini tabloya aktar.
 	// Her bir satır için düzenle/sil butonlarının click aksiyonunu ata
 	// Listelemeye genel bir search ekle
 	// Tabloda gösterilen alanlar editable olsun.
@@ -31,7 +30,25 @@ function CarList() {
 		setPagination({page: page, pageSize: pagination.pageSize});
 	};
 	const setPageSize = pageSize => {
-		setPagination({page: pagination.page, pageSize: pageSize});
+		setPagination({page: 0, pageSize: pageSize});
+	};
+
+	const deleteCar = car => {
+		console.log(car, " objesi silinmek isteniyor..");
+	};
+
+	const buttonsTemplate = car => {
+		return (
+			<>
+				<Button label="Düzenle" severity="warning"></Button>
+				<Button
+					onClick={() => deleteCar(car)}
+					className="mx-2"
+					label="Sil"
+					severity="danger"
+				></Button>
+			</>
+		);
 	};
 
 	return (
@@ -45,6 +62,7 @@ function CarList() {
 						<Column field="brandName" header="Brand Name"></Column>
 						<Column field="modelName" header="Model Name"></Column>
 						<Column field="plate" header="Plate"></Column>
+						<Column header="Actions" body={buttonsTemplate}></Column>
 					</DataTable>
 				</div>
 				<div className="col-12 mt-3">

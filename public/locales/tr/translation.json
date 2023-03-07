@@ -8,5 +8,7 @@
 	"previous": "Önceki",
 	"next": "Sonraki",
 	"rent": "Kirala",
-	"add.car": "Yeni Araba Ekle"
+	"add.car": "Yeni Araba Ekle",
+	"admin.dashboard": "Yönetim Paneli",
+	"car.panel": "Araba Yönetim Paneli"
 }

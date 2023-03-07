@@ -48,12 +48,18 @@ export default function Navbar() {
 			visible: authContext.authInformation.authenticated,
 		},
 		{
-			label: t("add.car"),
-			icon: "pi pi-user-minus",
+			label: t("admin.dashboard"),
+			icon: "pi pi-shield",
 			visible: authContext.authInformation.authenticated,
-			command: () => {
-				navigate("/car/add");
-			},
+			items: [
+				{
+					label: t("car.panel"),
+					icon: "pi pi-car",
+					command: () => {
+						navigate("/car/list");
+					},
+				},
+			],
 		},
 		{
 			label: t("logout"),

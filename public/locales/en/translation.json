@@ -8,5 +8,7 @@
 	"previous": "Previous",
 	"next": "Next",
 	"rent": "Rent",
-	"add.car": "Add Car"
+	"add.car": "Add Car",
+	"admin.dashboard": "Admin Panel",
+	"car.panel": "Car Management"
 }

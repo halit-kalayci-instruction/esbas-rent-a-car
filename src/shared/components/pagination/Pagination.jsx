@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 
 export default function Pagination(props) {
 	const {t} = useTranslation();
+	//TODO: Dynamic Page Size Options
 	return (
 		<div className="row">
 			<div className="col-3">

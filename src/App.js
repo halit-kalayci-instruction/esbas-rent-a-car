@@ -12,6 +12,7 @@ import { LoaderProvider } from './shared/contexts/LoaderContext';
 import Loader from './shared/components/loader/Loader';
 import { AuthProvider } from './shared/contexts/AuthContext';
 import AddCar from './features/admin/car/addCar/AddCar';
+import CarList from './features/admin/car/list/CarList';
 //react-router-dom
 
 // createContext, useContext
@@ -28,6 +29,7 @@ function App() {
             <Route path="homepage" element={<Homepage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="car/add" element={<AddCar />} />
+            <Route path="car/list" element={<CarList />} />
           </Routes>
           <footer></footer>
         </div>

@@ -14,7 +14,15 @@ function AddCar() {
 	const [models, setModels] = useState([]);
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [carToUpdate, setCarToUpdate] = useState({});
-	const [isLoading, setIsLoading] = useState(false);
+	const [initialValues, setInitialValues] = useState({
+		id: 0,
+		modelId: 1,
+		kilometer: 0,
+		modelYear: 2010,
+		plate: "",
+		minFindeksCreditRate: 800,
+		carState: 1,
+	});
 	const navigate = useNavigate();
 	useEffect(() => {
 		if (params.id) {
@@ -24,21 +32,9 @@ function AddCar() {
 		fetchModels();
 	}, []);
 
-	let initialValues = {
-		id: 0,
-		modelId: 1,
-		kilometer: 0,
-		modelYear: 2010,
-		plate: "",
-		minFindeksCreditRate: 800,
-		carState: 1,
-	};
-
 	useEffect(() => {
-		console.log("carToUpdate değişti.");
-		//TODO:Fix
 		if (carToUpdate.id) {
-			initialValues = {
+			setInitialValues({
 				id: carToUpdate.id,
 				modelId: carToUpdate.modelId,
 				kilometer: carToUpdate.kilometer,
@@ -46,18 +42,15 @@ function AddCar() {
 				plate: carToUpdate.plate,
 				minFindeksCreditRate: carToUpdate.minFindeksCreditRate,
 				carState: carToUpdate.carState,
-			};
+			});
 		}
-		console.log(initialValues);
 	}, [carToUpdate]);
 
 	const fetchCarInfo = () => {
 		let carService = new CarService();
-		setIsLoading(true);
 		carService.getById(params.id).then(response => {
 			console.log(response.data);
 			setCarToUpdate(response.data);
-			setIsLoading(false);
 		});
 	};
 
@@ -106,47 +99,45 @@ function AddCar() {
 		<div className="container">
 			<div className="row">
 				<div className="col-12">
-					{!isLoading && (
-						<Formik
-							initialValues={initialValues}
-							validationSchema={validationSchema}
-							enableReinitialize={true}
-							onSubmit={values => {
-								handleSubmit(values);
-							}}
-						>
-							<Form>
-								<BaseSelect
-									label="Model Seçiniz"
-									name="modelId"
-									valueKey="id"
-									nameKeys={["id", "brandName", "name"]}
-									nameDivider=" "
-									data={models}
-								></BaseSelect>
-								<BaseInput label="Model Yılı" name="modelYear"></BaseInput>
-								<BaseInput label="Kilometre" name="kilometer"></BaseInput>
-								<BaseInput label="Plaka" name="plate"></BaseInput>
-								<BaseInput
-									label="Min. Findeks Notu"
-									name="minFindeksCreditRate"
-								></BaseInput>
-								<BaseSelect
-									label="Araba Durumu"
-									name="carState"
-									valueKey="id"
-									nameKeys={["label"]}
-									nameDivider=" "
-									data={carStates}
-								></BaseSelect>
-								<Button
-									className="mt-3 w-100"
-									type="submit"
-									label="Araba Ekle"
-								></Button>
-							</Form>
-						</Formik>
-					)}
+					<Formik
+						initialValues={initialValues}
+						validationSchema={validationSchema}
+						enableReinitialize
+						onSubmit={values => {
+							handleSubmit(values);
+						}}
+					>
+						<Form>
+							<BaseSelect
+								label="Model Seçiniz"
+								name="modelId"
+								valueKey="id"
+								nameKeys={["id", "brandName", "name"]}
+								nameDivider=" "
+								data={models}
+							></BaseSelect>
+							<BaseInput label="Model Yılı" name="modelYear"></BaseInput>
+							<BaseInput label="Kilometre" name="kilometer"></BaseInput>
+							<BaseInput label="Plaka" name="plate"></BaseInput>
+							<BaseInput
+								label="Min. Findeks Notu"
+								name="minFindeksCreditRate"
+							></BaseInput>
+							<BaseSelect
+								label="Araba Durumu"
+								name="carState"
+								valueKey="id"
+								nameKeys={["label"]}
+								nameDivider=" "
+								data={carStates}
+							></BaseSelect>
+							<Button
+								className="mt-3 w-100"
+								type="submit"
+								label={isUpdating ? "Arabayı Güncelle" : "Araba Ekle"}
+							></Button>
+						</Form>
+					</Formik>
 				</div>
 			</div>
 		</div>

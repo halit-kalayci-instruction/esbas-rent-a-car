@@ -29,6 +29,7 @@ function App() {
             <Route path="homepage" element={<Homepage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="car/add" element={<AddCar />} />
+            <Route path="car/update/:id" element={<AddCar />} />
             <Route path="car/list" element={<CarList />} />
           </Routes>
           <footer></footer>

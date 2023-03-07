@@ -49,7 +49,7 @@ function CarList() {
 		carService.delete(carToDelete.id).then(response => {
 			setVisible(false);
 			toastr.success("Araba başarıyla silindi.");
-			//fetchCars(); => Tekrar veritabanından bilgileri çek
+			// fetchCars(); => Tekrar veritabanından bilgileri çek
 			// data = { hasPrevious:false, hasNext:true, index:0, pageSize:10, items:[] }
 			setData({...data, items: data.items.filter(i => i.id != carToDelete.id)}); // => Zaten silindi, memoryde silme işlemi gerçekleştir.
 		});
@@ -58,7 +58,11 @@ function CarList() {
 	const buttonsTemplate = car => {
 		return (
 			<>
-				<Button label="Düzenle" severity="warning"></Button>
+				<Button
+					onClick={() => navigate("/car/update/" + car.id)}
+					label="Düzenle"
+					severity="warning"
+				></Button>
 				<Button
 					onClick={() => deleteCar(car)}
 					className="mx-2"

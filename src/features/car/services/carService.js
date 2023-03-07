@@ -5,8 +5,16 @@ export default class CarService {
         return instance.get(`Cars?Page=${page}&PageSize=${pageSize}`)
     }
 
+    getById(id) {
+        return instance.get("Cars/" + id);
+    }
+
     add(car) {
         return instance.post("Cars", car);
+    }
+
+    update(car) {
+        return instance.put("Cars", car);
     }
 
     delete(id) {

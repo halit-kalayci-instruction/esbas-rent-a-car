@@ -25,6 +25,7 @@ function CarList() {
 	const [visible, setVisible] = useState(false);
 	const [carToDelete, setCarToDelete] = useState({});
 	const [models, setModels] = useState([]);
+	const [modelChanged, setModelChanged] = useState(false);
 
 	useEffect(() => {
 		fetchCars();
@@ -105,6 +106,12 @@ function CarList() {
 			/>
 		);
 	};
+
+	const getSelectedModelName = id => {
+		if (models.length <= 0) return "";
+		return models.find(c => c.id == id)?.name;
+	};
+
 	//TODO: Select box change action
 	const ModelSelector = options => {
 		console.log(options);
@@ -118,16 +125,19 @@ function CarList() {
 			// 		<option value={model.name}>{model.name}</option>
 			// 	))}
 			// </select>
-
+			//
 			<Dropdown
-				value={options.rowData.modelName}
-				options={models}
+				value={
+					modelChanged ? options.rowData.modelName : options.rowData.modelId
+				}
+				options={models.map(i => i.id)}
 				onChange={e => {
-					options.editorCallback(e.value.id);
+					setModelChanged(true);
+					options.editorCallback(e.value);
 				}}
 				placeholder="Select a Model"
 				itemTemplate={option => {
-					return <Tag value={option.name}></Tag>;
+					return <Tag value={getSelectedModelName(option)}></Tag>;
 				}}
 			/>
 		);

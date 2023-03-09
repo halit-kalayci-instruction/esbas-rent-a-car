@@ -112,48 +112,37 @@ function CarList() {
 		return models.find(c => c.id == id)?.name;
 	};
 
-	//TODO: Custom Implementation
 	const ModelSelector = options => {
-		console.log(options);
 		return (
-			// <select
-			// 	className="form-select"
-			// 	value={options.value}
-			// 	onChange={e => options.editorCallback(e.value)}
-			// >
-			// 	{models.map(model => (
-			// 		<option value={model.name}>{model.name}</option>
-			// 	))}
-			// </select>
-			//
+			<select
+				className="form-select"
+				onChange={e => {
+					setModelChanged(true);
+					options.editorCallback(e.target.value);
+				}}
+				value={
+					modelChanged ? options.rowData.modelName : options.rowData.modelId
+				}
+			>
+				{models.map(model => (
+					<option value={model.id}>
+						{model.id}-{model.brandName}-{model.name}
+					</option>
+				))}
+			</select>
 			// <Dropdown
 			// 	value={
 			// 		modelChanged ? options.rowData.modelName : options.rowData.modelId
 			// 	}
-			// 	options={models.map(i => i.id)}
+			// 	options={models}
 			// 	onChange={e => {
 			// 		setModelChanged(true);
 			// 		options.editorCallback(e.value);
 			// 	}}
 			// 	placeholder="Select a Model"
-			// 	itemTemplate={option => {
-			// 		return <Tag value={getSelectedModelName(option)}></Tag>;
-			// 	}}
+			// 	optionLabel="name"
+			// 	optionValue="id"
 			// />
-
-			<Dropdown
-				value={
-					modelChanged ? options.rowData.modelName : options.rowData.modelId
-				}
-				options={models}
-				onChange={e => {
-					setModelChanged(true);
-					options.editorCallback(e.value);
-				}}
-				placeholder="Select a Model"
-				optionLabel="name"
-				optionValue="id"
-			/>
 		);
 	};
 

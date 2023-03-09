@@ -112,7 +112,7 @@ function CarList() {
 		return models.find(c => c.id == id)?.name;
 	};
 
-	//TODO: Select box change action
+	//TODO: Custom Implementation
 	const ModelSelector = options => {
 		console.log(options);
 		return (
@@ -126,19 +126,33 @@ function CarList() {
 			// 	))}
 			// </select>
 			//
+			// <Dropdown
+			// 	value={
+			// 		modelChanged ? options.rowData.modelName : options.rowData.modelId
+			// 	}
+			// 	options={models.map(i => i.id)}
+			// 	onChange={e => {
+			// 		setModelChanged(true);
+			// 		options.editorCallback(e.value);
+			// 	}}
+			// 	placeholder="Select a Model"
+			// 	itemTemplate={option => {
+			// 		return <Tag value={getSelectedModelName(option)}></Tag>;
+			// 	}}
+			// />
+
 			<Dropdown
 				value={
 					modelChanged ? options.rowData.modelName : options.rowData.modelId
 				}
-				options={models.map(i => i.id)}
+				options={models}
 				onChange={e => {
 					setModelChanged(true);
 					options.editorCallback(e.value);
 				}}
 				placeholder="Select a Model"
-				itemTemplate={option => {
-					return <Tag value={getSelectedModelName(option)}></Tag>;
-				}}
+				optionLabel="name"
+				optionValue="id"
 			/>
 		);
 	};

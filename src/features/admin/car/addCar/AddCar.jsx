@@ -8,21 +8,26 @@ import * as Yup from "yup";
 import CarService from "../../../car/services/carService";
 import toastr from "toastr";
 import {useNavigate, useParams} from "react-router-dom";
+import BrandService from "../../../brand/services/brandService";
+import {init} from "i18next";
 //TODO: Translate page
-function AddCar() {
+function AddCar(props) {
 	const params = useParams();
 	const [models, setModels] = useState([]);
+	const [brands, setBrands] = useState([]);
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [carToUpdate, setCarToUpdate] = useState({});
 	const [initialValues, setInitialValues] = useState({
 		id: 0,
-		modelId: 1,
+		brandId: 0,
+		modelId: 0,
 		kilometer: 0,
 		modelYear: 2010,
 		plate: "",
 		minFindeksCreditRate: 800,
 		carState: 1,
 	});
+	const [selectedBrandId, setSelectedBrandId] = useState(0);
 	const navigate = useNavigate();
 	useEffect(() => {
 		if (params.id) {
@@ -46,6 +51,10 @@ function AddCar() {
 		}
 	}, [carToUpdate]);
 
+	useEffect(() => {
+		if (models.length > 0) fetchBrands();
+	}, [models]);
+
 	const fetchCarInfo = () => {
 		let carService = new CarService();
 		carService.getById(params.id).then(response => {
@@ -61,6 +70,19 @@ function AddCar() {
 			setModels(response.data.items);
 		});
 	};
+
+	const fetchBrands = () => {
+		let brandService = new BrandService();
+		brandService.getAll().then(response => {
+			setBrands(response.data.items);
+			setSelectedBrandId(response.data.items[0].id);
+			let modelID = models.filter(
+				i => i.brandId == response.data.items[0].id,
+			)[0].id;
+			setInitialValues({...initialValues, modelId: modelID});
+		});
+	};
+
 	//TODO: Translate
 	//TODO: Globalize
 	const carStates = [
@@ -109,12 +131,33 @@ function AddCar() {
 					>
 						<Form>
 							<BaseSelect
+								label="Marka Seçiniz"
+								name="brandId"
+								valueKey="id"
+								nameKeys={["name"]}
+								nameDivider=""
+								data={brands}
+								onChange={e => {
+									setSelectedBrandId(e.target.value);
+									let modelID = models.filter(
+										i => i.brandId == e.target.value,
+									)[0].id;
+									setInitialValues({...initialValues, modelId: modelID});
+								}}
+							/>
+							<BaseSelect
+								isDisabled={
+									selectedBrandId > 0 &&
+									models.filter(i => i.brandId == selectedBrandId).length > 0
+										? false
+										: true
+								}
 								label="Model Seçiniz"
 								name="modelId"
 								valueKey="id"
 								nameKeys={["id", "brandName", "name"]}
 								nameDivider=" "
-								data={models}
+								data={models.filter(i => i.brandId == selectedBrandId)}
 							></BaseSelect>
 							<BaseInput label="Model Yılı" name="modelYear"></BaseInput>
 							<BaseInput label="Kilometre" name="kilometer"></BaseInput>

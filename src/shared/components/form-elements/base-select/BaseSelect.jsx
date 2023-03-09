@@ -14,16 +14,21 @@ import React from "react";
 // id-brandName-fuelName
 // 1 BMW Diesel
 //TODO: Fix 1 item problem.
+//TODO: Manual Call for Formik
 function BaseSelect(props) {
 	return (
 		<>
 			<label>{props.label}</label>
 			<Field
+				disabled={props.isDisabled}
 				className={"form-select " + props.className}
 				as="select"
 				name={props.name}
+				onBlur={e => {
+					props.onChange(e);
+				}}
 			>
-				{props.data?.map(opt => (
+				{props.data?.map((opt, index) => (
 					<option value={opt[props.valueKey]}>
 						{props.nameKeys.map(key => {
 							return opt[key] + props.nameDivider;

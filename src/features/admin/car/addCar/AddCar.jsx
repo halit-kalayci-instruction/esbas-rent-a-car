@@ -39,8 +39,10 @@ function AddCar(props) {
 
 	useEffect(() => {
 		if (carToUpdate.id) {
+			setSelectedBrandId(carToUpdate.brandId);
 			setInitialValues({
 				id: carToUpdate.id,
+				brandId: carToUpdate.brandId,
 				modelId: carToUpdate.modelId,
 				kilometer: carToUpdate.kilometer,
 				modelYear: carToUpdate.modelYear,
@@ -111,15 +113,18 @@ function AddCar(props) {
 			});
 		}
 	};
-
+	//TODO: Fix 1 select
 	const FormObserver = () => {
 		// FormikContext
-		const {values, setFieldValue, setFieldTouched} = useFormikContext();
+		const {values, setFieldValue, setFieldTouched, touched} =
+			useFormikContext();
 		useEffect(() => {
 			setSelectedBrandId(values.brandId);
 			//formikteki modelId=0
-			setFieldValue("modelId", 0);
-			setFieldTouched("modelId", false);
+			if (isUpdating == false || (touched.brandId && touched.brandId == true)) {
+				setFieldValue("modelId", 0);
+				setFieldTouched("modelId", false);
+			}
 			//touched
 		}, [values.brandId]);
 		return null;

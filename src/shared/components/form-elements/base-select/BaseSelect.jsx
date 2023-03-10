@@ -13,8 +13,6 @@ import React from "react";
 */
 // id-brandName-fuelName
 // 1 BMW Diesel
-//TODO: Fix 1 item problem.
-//TODO: Manual Call for Formik
 function BaseSelect(props) {
 	return (
 		<>

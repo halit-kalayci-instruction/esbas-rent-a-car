@@ -27,7 +27,10 @@ export const LoaderProvider = ({ children }) => {
         }
     }
 
-    const decreaseRequestCount = () => {
+    const decreaseRequestCount = (config) => {
+        if (config.headers["X-Disable-Interceptor"] && config.headers["X-Disable-Interceptor"] == 'true') {
+            return;
+        }
         if (requestCount > 0)
             requestCount--;
     }
@@ -46,11 +49,11 @@ export const LoaderProvider = ({ children }) => {
     });
 
     instance.interceptors.response.use((response) => {
-        decreaseRequestCount();
+        decreaseRequestCount(response);
         setLoadingByRequestCount();
         return response;
     }, (error) => {
-        decreaseRequestCount();
+        decreaseRequestCount(error);
         setLoadingByRequestCount();
         return Promise.reject(error);
     })

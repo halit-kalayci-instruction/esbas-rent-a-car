@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Form, Formik} from "formik";
+import {Form, Formik, useFormikContext} from "formik";
 import BaseSelect from "../../../../shared/components/form-elements/base-select/BaseSelect";
 import ModelService from "../../../model/services/modelService";
 import {Button} from "primereact/button";
@@ -75,11 +75,6 @@ function AddCar(props) {
 		let brandService = new BrandService();
 		brandService.getAll().then(response => {
 			setBrands(response.data.items);
-			setSelectedBrandId(response.data.items[0].id);
-			let modelID = models.filter(
-				i => i.brandId == response.data.items[0].id,
-			)[0].id;
-			setInitialValues({...initialValues, modelId: modelID});
 		});
 	};
 
@@ -117,6 +112,19 @@ function AddCar(props) {
 		}
 	};
 
+	const FormObserver = () => {
+		// FormikContext
+		const {values, setFieldValue, setFieldTouched} = useFormikContext();
+		useEffect(() => {
+			setSelectedBrandId(values.brandId);
+			//formikteki modelId=0
+			setFieldValue("modelId", 0);
+			setFieldTouched("modelId", false);
+			//touched
+		}, [values.brandId]);
+		return null;
+	};
+
 	return (
 		<div className="container">
 			<div className="row">
@@ -130,6 +138,7 @@ function AddCar(props) {
 						}}
 					>
 						<Form>
+							<FormObserver></FormObserver>
 							<BaseSelect
 								label="Marka Seçiniz"
 								name="brandId"
@@ -137,13 +146,6 @@ function AddCar(props) {
 								nameKeys={["name"]}
 								nameDivider=""
 								data={brands}
-								onChange={e => {
-									setSelectedBrandId(e.target.value);
-									let modelID = models.filter(
-										i => i.brandId == e.target.value,
-									)[0].id;
-									setInitialValues({...initialValues, modelId: modelID});
-								}}
 							/>
 							<BaseSelect
 								isDisabled={

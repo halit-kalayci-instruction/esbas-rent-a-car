@@ -24,10 +24,10 @@ function BaseSelect(props) {
 				className={"form-select " + props.className}
 				as="select"
 				name={props.name}
-				onBlur={e => {
-					props.onChange(e);
-				}}
 			>
+				<option selected disabled value="0">
+					Please Select
+				</option>
 				{props.data?.map((opt, index) => (
 					<option value={opt[props.valueKey]}>
 						{props.nameKeys.map(key => {

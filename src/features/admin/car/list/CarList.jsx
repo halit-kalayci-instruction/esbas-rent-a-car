@@ -77,10 +77,8 @@ function CarList() {
 		return (
 			<>
 				<Button
-					disabled={!userHasRole(authContext, ["Cars.Update"])}
 					onClick={() => {
-						if (userHasRole(authContext, ["Cars.Update"]))
-							navigate("/car/update/" + car.id);
+						navigate("/car/update/" + car.id);
 					}}
 					label="Düzenle"
 					severity="warning"

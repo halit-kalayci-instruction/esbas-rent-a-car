@@ -13,6 +13,7 @@ import Loader from './shared/components/loader/Loader';
 import { AuthProvider } from './shared/contexts/AuthContext';
 import AddCar from './features/admin/car/addCar/AddCar';
 import CarList from './features/admin/car/list/CarList';
+import ProtectedRoute from './shared/components/protected-route/ProtectedRoute'
 //react-router-dom
 
 // createContext, useContext
@@ -29,7 +30,12 @@ function App() {
             <Route path="homepage" element={<Homepage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="car/add" element={<AddCar />} />
-            <Route path="car/update/:id" element={<AddCar />} />
+            <Route path="car/update/:id"
+              element={
+                <ProtectedRoute roles={["Cars.Update"]}>
+                  <AddCar />
+                </ProtectedRoute>} />
+
             <Route path="car/list" element={<CarList />} />
           </Routes>
           <footer></footer>

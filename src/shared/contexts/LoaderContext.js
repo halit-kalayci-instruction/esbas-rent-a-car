@@ -28,7 +28,7 @@ export const LoaderProvider = ({ children }) => {
     }
 
     const decreaseRequestCount = (config) => {
-        if (config.headers["X-Disable-Interceptor"] && config.headers["X-Disable-Interceptor"] == 'true') {
+        if (config?.headers && config.headers["X-Disable-Interceptor"] && config.headers["X-Disable-Interceptor"] == 'true') {
             return;
         }
         if (requestCount > 0)

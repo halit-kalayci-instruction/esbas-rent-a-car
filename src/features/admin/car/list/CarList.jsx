@@ -1,5 +1,5 @@
 import {Button} from "primereact/button";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
@@ -12,11 +12,14 @@ import {InputText} from "primereact/inputtext";
 import ModelService from "../../../model/services/modelService";
 import {Dropdown} from "primereact/dropdown";
 import {Tag} from "primereact/tag";
+import {AuthContext} from "../../../../shared/contexts/AuthContext";
+import {userHasRole} from "../../../../shared/utils/auth-status/AuthStatus";
 function CarList() {
 	// Her bir satır için düzenle/sil butonlarının click aksiyonunu ata
 	// Listelemeye genel bir search ekle
 	// Tabloda gösterilen alanlar editable olsun.
 	// Silmek için modal oluştur.
+	const authContext = useContext(AuthContext);
 	const {t} = useTranslation();
 	const navigate = useNavigate();
 
@@ -74,11 +77,16 @@ function CarList() {
 		return (
 			<>
 				<Button
-					onClick={() => navigate("/car/update/" + car.id)}
+					disabled={!userHasRole(authContext, ["Cars.Update"])}
+					onClick={() => {
+						if (userHasRole(authContext, ["Cars.Update"]))
+							navigate("/car/update/" + car.id);
+					}}
 					label="Düzenle"
 					severity="warning"
 				></Button>
 				<Button
+					disabled={!userHasRole(authContext, ["Cars.Delete"])}
 					onClick={() => deleteCar(car)}
 					className="mx-2"
 					label="Sil"
@@ -130,19 +138,6 @@ function CarList() {
 					</option>
 				))}
 			</select>
-			// <Dropdown
-			// 	value={
-			// 		modelChanged ? options.rowData.modelName : options.rowData.modelId
-			// 	}
-			// 	options={models}
-			// 	onChange={e => {
-			// 		setModelChanged(true);
-			// 		options.editorCallback(e.value);
-			// 	}}
-			// 	placeholder="Select a Model"
-			// 	optionLabel="name"
-			// 	optionValue="id"
-			// />
 		);
 	};
 

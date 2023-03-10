@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import CarCard from "../../../features/car/components/car-card/CarCard";
 import CarService from "../../../features/car/services/carService";
 import "./Homepage.scss";
@@ -6,9 +6,11 @@ import Pagination from "../../components/pagination/Pagination";
 import {useDispatch} from "react-redux";
 import {getAllCars, getAllCarsAsync} from "../../../store/actions/carActions";
 import BrandService from "../../../features/brand/services/brandService";
+import {AuthContext} from "../../contexts/AuthContext";
 
 export default function Homepage() {
 	// Redux
+	const authContext = useContext(AuthContext);
 	const [data, setData] = useState({});
 	const [pageSize, setpageSize] = useState(1);
 	const dispatch = useDispatch();

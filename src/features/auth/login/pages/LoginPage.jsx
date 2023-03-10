@@ -12,6 +12,7 @@ import {useDispatch} from "react-redux";
 import jwt_decode from "jwt-decode";
 import {Login} from "../../../../store/actions/authActions";
 import {AuthContext} from "../../../../shared/contexts/AuthContext";
+import {ROLES} from "../../../../shared/constants/claimConstants";
 export default function LoginPage() {
 	// initial values => {email:'', password:''}
 	// validation schema => yup validation schema
@@ -33,8 +34,11 @@ export default function LoginPage() {
 		loginService.login(values).then(response => {
 			setItem("token", response.data.accessToken.token);
 			let userInfo = jwt_decode(response.data.accessToken.token);
-			// dispatch(Login(userInfo));
-			authContext.setAuthInformation({authenticated: true, user: userInfo});
+			authContext.setAuthInformation({
+				authenticated: true,
+				user: userInfo,
+				roles: userInfo[ROLES],
+			});
 			navigate("/homepage");
 		});
 	};

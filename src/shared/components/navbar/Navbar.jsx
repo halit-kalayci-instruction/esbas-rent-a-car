@@ -10,12 +10,15 @@ import {removeItem} from "../../../core/utils/localStorage";
 import {Logout} from "../../../store/actions/authActions";
 import {AuthContext} from "../../contexts/AuthContext";
 import {useTranslation} from "react-i18next";
-import {NAME, NAME_ID} from "../../constants/claimConstants";
+import {ROLES} from "../../constants/claimConstants";
+import {userHasRole} from "../../utils/auth-status/AuthStatus";
 
 export default function Navbar() {
 	const authContext = useContext(AuthContext);
 	const dispatch = useDispatch();
 	const {t, i18n} = useTranslation();
+
+	//TODO: Dynamic Items
 	const menuItems = [
 		{
 			label: t("Homepage"),
@@ -39,21 +42,22 @@ export default function Navbar() {
 			command: () => {},
 		},
 		{
-			label: t("welcomeText", {
-				name: authContext.authInformation?.user
-					? authContext.authInformation.user[NAME]
-					: "Misafir",
-			}),
-			icon: "pi pi-user",
-			visible: authContext.authInformation.authenticated,
-		},
-		{
 			label: t("admin.dashboard"),
 			icon: "pi pi-shield",
-			visible: authContext.authInformation.authenticated,
+			visible: userHasRole(authContext, [
+				"Admin",
+				"Cars.Create",
+				"Cars.Update",
+			]),
 			items: [
 				{
 					label: t("car.panel"),
+					visible: userHasRole(authContext, [
+						"Admin",
+						"Cars.Create",
+						"Cars.Update",
+						"Cars.Delete",
+					]),
 					icon: "pi pi-car",
 					command: () => {
 						navigate("/car/list");

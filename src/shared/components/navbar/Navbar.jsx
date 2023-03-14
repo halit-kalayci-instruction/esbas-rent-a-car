@@ -44,15 +44,11 @@ export default function Navbar() {
 		{
 			label: t("admin.dashboard"),
 			icon: "pi pi-shield",
-			visible: userHasRole(authContext, [
-				"Admin",
-				"Cars.Create",
-				"Cars.Update",
-			]),
+			visible: userHasRole(["Admin", "Cars.Create", "Cars.Update"]),
 			items: [
 				{
 					label: t("car.panel"),
-					visible: userHasRole(authContext, [
+					visible: userHasRole([
 						"Admin",
 						"Cars.Create",
 						"Cars.Update",

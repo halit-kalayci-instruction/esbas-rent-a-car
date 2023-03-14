@@ -7,6 +7,8 @@ import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from './store/configureStore';
 import './i18n'
+
+// TODO: App component dışındakileri farklı dosyada handle et.
 const store = configureStore();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

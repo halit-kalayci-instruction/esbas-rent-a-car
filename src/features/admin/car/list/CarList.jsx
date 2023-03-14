@@ -77,6 +77,7 @@ function CarList() {
 		return (
 			<>
 				<Button
+					disabled={!userHasRole(["Cars.Update"])}
 					onClick={() => {
 						navigate("/car/update/" + car.id);
 					}}
@@ -84,7 +85,7 @@ function CarList() {
 					severity="warning"
 				></Button>
 				<Button
-					disabled={!userHasRole(authContext, ["Cars.Delete"])}
+					disabled={!authContext.hasPermission(["Cars.Delete"])}
 					onClick={() => deleteCar(car)}
 					className="mx-2"
 					label="Sil"

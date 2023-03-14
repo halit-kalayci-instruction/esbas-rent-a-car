@@ -34,6 +34,7 @@ export default function LoginPage() {
 		loginService.login(values).then(response => {
 			setItem("token", response.data.accessToken.token);
 			let userInfo = jwt_decode(response.data.accessToken.token);
+			dispatch(Login(userInfo));
 			authContext.setAuthInformation({
 				authenticated: true,
 				user: userInfo,

@@ -12,6 +12,6 @@ export default function ProtectedRoute({ children, roles }) {
     //     return userHasRole(authContext, roles);
     // }
     return (
-        userHasRole(authContext, roles) ? children : <Navigate to="/login"></Navigate>
+        userHasRole(roles) ? children : <Navigate to="/login"></Navigate>
     )
 }

@@ -10,5 +10,6 @@
 	"rent": "Rent",
 	"add.car": "Add Car",
 	"admin.dashboard": "Admin Panel",
-	"car.panel": "Car Management"
+	"car.panel": "Car Management",
+	"brand.panel": "Brand Management"
 }

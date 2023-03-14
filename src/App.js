@@ -12,8 +12,9 @@ import { LoaderProvider } from './shared/contexts/LoaderContext';
 import Loader from './shared/components/loader/Loader';
 import { AuthProvider } from './shared/contexts/AuthContext';
 import AddCar from './features/admin/car/addCar/AddCar';
-import CarList from './features/admin/car/list/CarList';
+import CarList from './features/admin/car/carList/CarList';
 import ProtectedRoute from './shared/components/protected-route/ProtectedRoute'
+import BrandList from './features/admin/brand/brandList/BrandList';
 //react-router-dom
 
 // createContext, useContext
@@ -34,6 +35,11 @@ function App() {
               element={
                 <ProtectedRoute roles={["Cars.Update"]}>
                   <AddCar />
+                </ProtectedRoute>} />
+            <Route path="brand/list"
+              element={
+                <ProtectedRoute roles={["Admin", "Brands.Create", "Brands.Update", "Brands.Delete"]}>
+                  <BrandList />
                 </ProtectedRoute>} />
 
             <Route path="car/list" element={<CarList />} />

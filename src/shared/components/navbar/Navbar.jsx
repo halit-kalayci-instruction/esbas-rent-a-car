@@ -59,6 +59,19 @@ export default function Navbar() {
 						navigate("/car/list");
 					},
 				},
+				{
+					label: t("brand.panel"),
+					visible: userHasRole([
+						"Admin",
+						"Brands.Create",
+						"Brands.Update",
+						"Brands.Delete",
+					]),
+					icon: "pi pi-bookmark",
+					command: () => {
+						navigate("/brand/list");
+					},
+				},
 			],
 		},
 		{

@@ -1,10 +1,14 @@
 import React, {useEffect, useState} from "react";
 import BrandService from "../../../brand/services/brandService";
 import Pagination from "../../../../shared/components/pagination/Pagination";
+import {useNavigate} from "react-router-dom";
 
 export default function BrandList() {
-	const [pagination, setPagination] = useState({page: 0, pageSize: 1});
+	const [pagination, setPagination] = useState({page: 0, pageSize: 10});
 	const [brandData, setBrandData] = useState({});
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const [brandToDelete, setBrandToDelete] = useState({});
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		fetchBrands();
@@ -18,45 +22,104 @@ export default function BrandList() {
 	};
 	//!Brandler çekilecek
 	//!Tabloda maplenerek gösterilecek
-	// Pagination eklenecek
+	//!Pagination eklenecek
 	// Edit butonu tıklanan rowun idsi ile /brand/update/id navigate edilecek
 	// Delete olduğunda modal ile emin misin? cevaba göre delete işlemi gerçekleştirelecek.
 	return (
-		<div className="container mt-3">
-			<h3>Brand List</h3>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th scope="col">#</th>
-						<th scope="col">Brand Name</th>
-						<th scope="col">Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{brandData.items?.map(brand => (
+		<React.Fragment>
+			<div className="container mt-3">
+				<h3>Brand List</h3>
+				<table class="table table-striped">
+					<thead>
 						<tr>
-							<th scope="row">{brand.id}</th>
-							<td>{brand.name}</td>
-							<td>
-								<button className="btn btn-warning mx-1">Edit</button>
-								<button className="btn btn-danger">Delete</button>
-							</td>
+							<th scope="col">#</th>
+							<th scope="col">Brand Name</th>
+							<th scope="col">Actions</th>
 						</tr>
-					))}
-				</tbody>
-			</table>
-			<Pagination
-				hasPrevious={brandData.hasPrevious}
-				hasNext={brandData.hasNext}
-				pages={brandData.pages}
-				index={brandData.index}
-				onPageChange={i => {
-					setPagination({page: i, pageSize: pagination.pageSize});
-				}}
-				onPageSizeChange={i => {
-					setPagination({page: pagination.page, pageSize: i});
-				}}
-			></Pagination>
-		</div>
+					</thead>
+					<tbody>
+						{brandData.items?.map(brand => (
+							<tr>
+								<th scope="row">{brand.id}</th>
+								<td>{brand.name}</td>
+								<td>
+									<button
+										className="btn btn-warning mx-1"
+										onClick={() => {
+											navigate("/brand/update/" + brand.id);
+										}}
+									>
+										Edit
+									</button>
+									<button
+										className="btn btn-danger"
+										onClick={() => {
+											setBrandToDelete(brand);
+											setShowDeleteModal(true);
+										}}
+									>
+										Delete
+									</button>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+				<Pagination
+					hasPrevious={brandData.hasPrevious}
+					hasNext={brandData.hasNext}
+					pages={brandData.pages}
+					index={brandData.index}
+					onPageChange={i => {
+						setPagination({page: i, pageSize: pagination.pageSize});
+					}}
+					onPageSizeChange={i => {
+						setPagination({page: pagination.page, pageSize: i});
+					}}
+				></Pagination>
+			</div>
+			{showDeleteModal && (
+				<div class="modal fade show d-block" tabindex="-1">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Modal title</h5>
+								<button
+									type="button"
+									class="btn-close"
+									data-bs-dismiss="modal"
+									aria-label="Close"
+									onClick={() => {
+										setShowDeleteModal(false);
+									}}
+								></button>
+							</div>
+							<div class="modal-body">
+								<p>
+									{brandToDelete.name} isimli markayı silmek istediğinize emin
+									misiniz?
+								</p>
+							</div>
+							<div class="modal-footer">
+								<button
+									type="button"
+									class="btn btn-secondary"
+									data-bs-dismiss="modal"
+									onClick={() => {
+										setShowDeleteModal(false);
+									}}
+								>
+									Close
+								</button>
+								<button type="button" class="btn btn-primary">
+									Save changes
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
+		</React.Fragment>
 	);
 }
+// && => JSX'de sol taraftaki ifade TRUE ise sağ taraftaki JSX'i render et

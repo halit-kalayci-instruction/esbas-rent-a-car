@@ -26,11 +26,19 @@ export default function BrandList() {
 	//!Edit butonu tıklanan rowun idsi ile /brand/update/id navigate edilecek
 	//!Delete olduğunda modal ile emin misin? modalı çıkartılacak
 	//!cevaba göre delete işlemi gerçekleştirelecek.
-
 	const confirmDelete = () => {
 		let brandService = new BrandService();
 		brandService.delete(brandToDelete.id).then(response => {
 			// silindiğinde yapılacak işlemler.
+			//? Direkt API'den verilerin son halini çek.
+			setPagination({page: 0, pageSize: 10});
+			//? Silindiğine eminim, hafızadaki verileri buna göre uyarla.
+			// brandData = {page:0, size:15, items:[1,2,3]}
+			// brandData = {items:[1,2]}
+			// setBrandData({
+			// 	...brandData,
+			// 	items: brandData.items.filter(i => i.id != brandToDelete.id),
+			// });
 		});
 	};
 	return (

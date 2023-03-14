@@ -23,8 +23,16 @@ export default function BrandList() {
 	//!Brandler çekilecek
 	//!Tabloda maplenerek gösterilecek
 	//!Pagination eklenecek
-	// Edit butonu tıklanan rowun idsi ile /brand/update/id navigate edilecek
-	// Delete olduğunda modal ile emin misin? cevaba göre delete işlemi gerçekleştirelecek.
+	//!Edit butonu tıklanan rowun idsi ile /brand/update/id navigate edilecek
+	//!Delete olduğunda modal ile emin misin? modalı çıkartılacak
+	//!cevaba göre delete işlemi gerçekleştirelecek.
+
+	const confirmDelete = () => {
+		let brandService = new BrandService();
+		brandService.delete(brandToDelete.id).then(response => {
+			// silindiğinde yapılacak işlemler.
+		});
+	};
 	return (
 		<React.Fragment>
 			<div className="container mt-3">
@@ -83,7 +91,7 @@ export default function BrandList() {
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h5 class="modal-title">Modal title</h5>
+								<h5 class="modal-title">Silme İşlemi</h5>
 								<button
 									type="button"
 									class="btn-close"
@@ -111,8 +119,14 @@ export default function BrandList() {
 								>
 									Close
 								</button>
-								<button type="button" class="btn btn-primary">
-									Save changes
+								<button
+									onClick={() => {
+										confirmDelete();
+									}}
+									type="button"
+									class="btn btn-danger"
+								>
+									Delete
 								</button>
 							</div>
 						</div>

@@ -26,6 +26,7 @@ export default function BrandList() {
 	//!Edit butonu tıklanan rowun idsi ile /brand/update/id navigate edilecek
 	//!Delete olduğunda modal ile emin misin? modalı çıkartılacak
 	//!cevaba göre delete işlemi gerçekleştirelecek.
+	// QUICK EDIT / QUICK ADD
 	const confirmDelete = () => {
 		let brandService = new BrandService();
 		brandService.delete(brandToDelete.id).then(response => {

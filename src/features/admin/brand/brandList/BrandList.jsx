@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
 import BrandService from "../../../brand/services/brandService";
+import Pagination from "../../../../shared/components/pagination/Pagination";
 
 export default function BrandList() {
-	const [pagination, setPagination] = useState({page: 0, pageSize: 10});
+	const [pagination, setPagination] = useState({page: 0, pageSize: 1});
 	const [brandData, setBrandData] = useState({});
+
 	useEffect(() => {
 		fetchBrands();
-	}, []);
+	}, [pagination]);
 
 	const fetchBrands = () => {
 		let brandService = new BrandService();
@@ -14,9 +16,9 @@ export default function BrandList() {
 			setBrandData(response.data);
 		});
 	};
-	// Brandler çekilecek
+	//!Brandler çekilecek
+	//!Tabloda maplenerek gösterilecek
 	// Pagination eklenecek
-	// Tabloda maplenerek gösterilecek
 	// Edit butonu tıklanan rowun idsi ile /brand/update/id navigate edilecek
 	// Delete olduğunda modal ile emin misin? cevaba göre delete işlemi gerçekleştirelecek.
 	return (
@@ -31,7 +33,7 @@ export default function BrandList() {
 					</tr>
 				</thead>
 				<tbody>
-					{brandData.items.map(brand => (
+					{brandData.items?.map(brand => (
 						<tr>
 							<th scope="row">{brand.id}</th>
 							<td>{brand.name}</td>
@@ -43,6 +45,18 @@ export default function BrandList() {
 					))}
 				</tbody>
 			</table>
+			<Pagination
+				hasPrevious={brandData.hasPrevious}
+				hasNext={brandData.hasNext}
+				pages={brandData.pages}
+				index={brandData.index}
+				onPageChange={i => {
+					setPagination({page: i, pageSize: pagination.pageSize});
+				}}
+				onPageSizeChange={i => {
+					setPagination({page: pagination.page, pageSize: i});
+				}}
+			></Pagination>
 		</div>
 	);
 }

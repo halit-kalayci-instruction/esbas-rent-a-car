@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import BrandService from "../../../brand/services/brandService";
 import Pagination from "../../../../shared/components/pagination/Pagination";
 import {useNavigate} from "react-router-dom";
-
+import toastr from "toastr";
 export default function BrandList() {
 	const [pagination, setPagination] = useState({page: 0, pageSize: 10});
 	const [brandData, setBrandData] = useState({});
@@ -31,7 +31,9 @@ export default function BrandList() {
 		brandService.delete(brandToDelete.id).then(response => {
 			// silindiğinde yapılacak işlemler.
 			//? Direkt API'den verilerin son halini çek.
+			toastr.success("Marka başarıyla silindi.");
 			setPagination({page: 0, pageSize: 10});
+			setShowDeleteModal(false);
 			//? Silindiğine eminim, hafızadaki verileri buna göre uyarla.
 			// brandData = {page:0, size:15, items:[1,2,3]}
 			// brandData = {items:[1,2]}
@@ -45,6 +47,15 @@ export default function BrandList() {
 		<React.Fragment>
 			<div className="container mt-3">
 				<h3>Brand List</h3>
+				<button
+					className="btn btn-primary"
+					onClick={() => {
+						navigate("/brand/add");
+					}}
+				>
+					{" "}
+					Yeni Ekle{" "}
+				</button>
 				<table class="table table-striped">
 					<thead>
 						<tr>

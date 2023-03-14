@@ -15,6 +15,7 @@ import AddCar from './features/admin/car/addCar/AddCar';
 import CarList from './features/admin/car/carList/CarList';
 import ProtectedRoute from './shared/components/protected-route/ProtectedRoute'
 import BrandList from './features/admin/brand/brandList/BrandList';
+import AddBrand from './features/admin/brand/addBrand/AddBrand';
 //react-router-dom
 
 // createContext, useContext
@@ -40,6 +41,18 @@ function App() {
               element={
                 <ProtectedRoute roles={["Admin", "Brands.Create", "Brands.Update", "Brands.Delete"]}>
                   <BrandList />
+                </ProtectedRoute>} />
+
+            <Route path="brand/add"
+              element={
+                <ProtectedRoute roles={["Admin", "Brands.Create"]}>
+                  <AddBrand />
+                </ProtectedRoute>} />
+
+            <Route path="brand/update/:id"
+              element={
+                <ProtectedRoute roles={["Admin", "Brands.Update"]}>
+                  <AddBrand />
                 </ProtectedRoute>} />
 
             <Route path="car/list" element={<CarList />} />

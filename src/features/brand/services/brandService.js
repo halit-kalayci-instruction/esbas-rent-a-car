@@ -10,4 +10,7 @@ export default class BrandService {
     add(brand) {
         return instance.post("Brands", brand);
     }
+    update(brand) {
+        return instance.put("Brands", brand);
+    }
 }

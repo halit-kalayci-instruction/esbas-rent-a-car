@@ -40,6 +40,11 @@ export default function BrandList() {
 		name: Yup.string().required(),
 	});
 
+	const quickEditValidationSchema = Yup.object({
+		id: Yup.number().required().min(0),
+		name: Yup.string().required(),
+	});
+
 	const addBrand = values => {
 		let brandService = new BrandService();
 		brandService
@@ -89,6 +94,17 @@ export default function BrandList() {
 		);
 	};
 
+	const update = brand => {
+		let brandService = new BrandService();
+		brandService.update(brand).then(response => {
+			toastr.success("Marka başarıyla güncellendi");
+			setEditingBrand({});
+			setPagination({page: 0, pageSize: 10});
+		});
+	};
+
+	// One way data binding
+	// Two way data binding
 	const brandEditTemplate = brand => {
 		return (
 			<tr>
@@ -96,7 +112,7 @@ export default function BrandList() {
 					<input
 						className="form-control"
 						name="id"
-						value={brand.id}
+						value={editingBrand.id}
 						disabled
 					></input>
 				</th>
@@ -104,14 +120,27 @@ export default function BrandList() {
 					<input
 						className="form-control"
 						name="name"
-						value={brand.name}
+						value={editingBrand.name}
+						onChange={event =>
+							setEditingBrand({...editingBrand, name: event.target.value})
+						}
 					></input>
 				</td>
 				<td>
 					<button
 						className="btn btn-success mx-1"
 						onClick={() => {
-							setEditingBrand(brand);
+							// YUP'da manual validation
+							quickEditValidationSchema
+								.validate(editingBrand)
+								.then(response => {
+									// validation başarılı
+									update(response);
+								})
+								.catch(error => {
+									// validation hatalı
+									toastr.error(error);
+								});
 						}}
 					>
 						Save

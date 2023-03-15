@@ -12,6 +12,7 @@ import {AuthContext} from "../../contexts/AuthContext";
 import {useTranslation} from "react-i18next";
 import {ROLES} from "../../constants/claimConstants";
 import {userHasRole} from "../../utils/auth-status/AuthStatus";
+import {NAVBAR_TYPES} from "../../../enviroment";
 
 export default function Navbar() {
 	const authContext = useContext(AuthContext);
@@ -106,6 +107,8 @@ export default function Navbar() {
 			],
 		},
 	];
+	const [menu, setMenu] = useState(menuItems);
+
 	const handleLogout = () => {
 		removeItem("token");
 		dispatch(Logout());
@@ -125,5 +128,31 @@ export default function Navbar() {
 		console.log(authContext);
 	}, [pathname]);
 
-	return <div>{showNavbar && <Menubar model={menuItems} />}</div>;
+	useEffect(() => {
+		fetchMenuItems();
+	}, []);
+
+	const fetchMenuItems = () => {
+		// Menüyü dinamikleştirme
+		// AXIOS
+		// FETCH
+		fetch("data/menu.json")
+			.then(response => response.json())
+			.then(json =>
+				setMenu(
+					json.map(menuItem => {
+						return {
+							...menuItem,
+							url: undefined,
+							command: () => {
+								if (menuItem.type == NAVBAR_TYPES.URL) navigate(menuItem.url);
+								if (menuItem.type == NAVBAR_TYPES.CODE) eval(menuItem.code);
+							},
+						};
+					}),
+				),
+			);
+	};
+
+	return <div>{showNavbar && <Menubar model={menu} />}</div>;
 }

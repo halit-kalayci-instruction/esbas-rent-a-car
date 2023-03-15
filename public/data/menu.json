@@ -30,10 +30,10 @@
 		"label": "logout",
 		"icon": "pi pi-user-minus",
 		"type": 2,
-		"authOnly": false,
+		"authOnly": true,
 		"showAuth": true,
-		"code": "alert('x')",
-		"roles": []
+		"roles": [],
+		"code": "console.log('X')"
 	},
 	{
 		"label": "admin.dashboard",
@@ -42,6 +42,7 @@
 		"url": "",
 		"authOnly": true,
 		"showAuth": true,
+		"titles": ["CEO"],
 		"roles": ["Admin", "Cars.Create", "Cars.Update"],
 		"items": [
 			{

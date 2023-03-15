@@ -6,11 +6,15 @@ import {useParams} from "react-router-dom";
 // Form içerisiini otomatik doldur
 // submit..
 export default function AddBrand() {
+	const codeBlock = "console.log('X'); console.log('Y')";
 	const params = useParams();
 	const [isUpdating, setIsUpdating] = useState(false);
 	useEffect(() => {
 		// if (params.id) {
 		// }
+
+		//babel
+		eval(codeBlock);
 		let result = params.id != undefined;
 		setIsUpdating(result);
 		if (result) {

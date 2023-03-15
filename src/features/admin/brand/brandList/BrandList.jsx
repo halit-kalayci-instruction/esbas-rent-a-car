@@ -3,11 +3,15 @@ import BrandService from "../../../brand/services/brandService";
 import Pagination from "../../../../shared/components/pagination/Pagination";
 import {useNavigate} from "react-router-dom";
 import toastr from "toastr";
+import {Form, Formik} from "formik";
+import BaseInput from "../../../../shared/components/form-elements/base-input/BaseInput";
+import * as Yup from "yup";
 export default function BrandList() {
 	const [pagination, setPagination] = useState({page: 0, pageSize: 10});
 	const [brandData, setBrandData] = useState({});
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [brandToDelete, setBrandToDelete] = useState({});
+	const [showQuickAddForm, setShowQuickAddForm] = useState(false);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -44,6 +48,24 @@ export default function BrandList() {
 			// });
 		});
 	};
+
+	const quickAddValidatonSchema = Yup.object({
+		name: Yup.string().required(),
+	});
+
+	const addBrand = values => {
+		let brandService = new BrandService();
+		brandService
+			.add(values)
+			.then(response => {
+				toastr.success("Marka başarıyla eklendi.");
+				setPagination({page: 0, pageSize: 10});
+			})
+			.finally(() => {
+				setShowQuickAddForm(false);
+			});
+	};
+
 	return (
 		<React.Fragment>
 			<div className="container mt-3">
@@ -56,6 +78,40 @@ export default function BrandList() {
 				>
 					Yeni Ekle
 				</button>
+				<button
+					className="btn mx-2 btn-secondary"
+					onClick={() => {
+						setShowQuickAddForm(true);
+					}}
+				>
+					Hızlı Ekle
+				</button>
+				{showQuickAddForm && (
+					<Formik
+						initialValues={{name: ""}}
+						onSubmit={values => {
+							addBrand(values);
+						}}
+						validationSchema={quickAddValidatonSchema}
+					>
+						<Form>
+							<BaseInput name="name" label="Marka Adı"></BaseInput>
+							<div className="mt-2">
+								<button className="btn btn-primary" type="submit">
+									Ekle
+								</button>
+								<button
+									className="btn btn-secondary mx-2"
+									onClick={() => {
+										setShowQuickAddForm(false);
+									}}
+								>
+									İptal
+								</button>
+							</div>
+						</Form>
+					</Formik>
+				)}
 				<table class="table table-striped">
 					<thead>
 						<tr>

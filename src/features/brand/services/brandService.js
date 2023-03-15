@@ -7,4 +7,7 @@ export default class BrandService {
     delete(id) {
         return instance.delete(`Brands/${id}`)
     }
+    add(brand) {
+        return instance.post("Brands", brand);
+    }
 }

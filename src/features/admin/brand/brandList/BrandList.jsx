@@ -54,8 +54,7 @@ export default function BrandList() {
 						navigate("/brand/add");
 					}}
 				>
-					{" "}
-					Yeni Ekle{" "}
+					Yeni Ekle
 				</button>
 				<table class="table table-striped">
 					<thead>

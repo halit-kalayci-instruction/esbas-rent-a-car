@@ -1,0 +1,58 @@
+[
+	{
+		"label": "homepage",
+		"icon": "pi pi-home",
+		"type": 0,
+		"url": "/homepage",
+		"authOnly": false,
+		"showAuth": true,
+		"roles": []
+	},
+	{
+		"label": "login",
+		"icon": "pi pi-sign-in",
+		"type": 0,
+		"url": "/login",
+		"authOnly": false,
+		"showAuth": false,
+		"roles": []
+	},
+	{
+		"label": "register",
+		"icon": "pi pi-user-plus",
+		"type": 0,
+		"url": "/register",
+		"authOnly": false,
+		"showAuth": false,
+		"roles": []
+	},
+	{
+		"label": "logout",
+		"icon": "pi pi-user-minus",
+		"type": 2,
+		"authOnly": false,
+		"showAuth": true,
+		"code": "alert('x')",
+		"roles": []
+	},
+	{
+		"label": "admin.dashboard",
+		"icon": "pi pi-shield",
+		"type": 1,
+		"url": "",
+		"authOnly": true,
+		"showAuth": true,
+		"roles": ["Admin", "Cars.Create", "Cars.Update"],
+		"items": [
+			{
+				"label": "car.panel",
+				"icon": "pi pi-car",
+				"authOnly": true,
+				"showAuth": true,
+				"roles": ["Admin", "Cars.Create", "Cars.Update"],
+				"type": 0,
+				"url": "/brand/list"
+			}
+		]
+	}
+]

@@ -19,5 +19,29 @@ export default function AddBrand() {
 		// eğer parametrede id varsa update yoksa add
 	}, []);
 
-	return <div>{isUpdating ? "Update" : "Add"}</div>;
+	const updateTemplate = () => {
+		return (
+			<div className="container">
+				<div className="row">
+					<div className="col-4">
+						<h3>Update</h3>
+					</div>
+				</div>
+			</div>
+		);
+	};
+
+	const addTemplate = text => {
+		return (
+			<div className="container">
+				<div className="row">
+					<div className="col-4">
+						<h3>{text}</h3>
+					</div>
+				</div>
+			</div>
+		);
+	};
+
+	return <div>{isUpdating ? updateTemplate() : addTemplate("Merhaba")}</div>;
 }

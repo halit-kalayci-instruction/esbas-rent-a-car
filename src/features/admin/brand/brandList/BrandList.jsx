@@ -6,12 +6,15 @@ import toastr from "toastr";
 import {Form, Formik} from "formik";
 import BaseInput from "../../../../shared/components/form-elements/base-input/BaseInput";
 import * as Yup from "yup";
+
+//TODO: Edit popup
 export default function BrandList() {
 	const [pagination, setPagination] = useState({page: 0, pageSize: 10});
 	const [brandData, setBrandData] = useState({});
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [brandToDelete, setBrandToDelete] = useState({});
 	const [showQuickAddForm, setShowQuickAddForm] = useState(false);
+	const [editingBrand, setEditingBrand] = useState({});
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -24,28 +27,12 @@ export default function BrandList() {
 			setBrandData(response.data);
 		});
 	};
-	//!Brandler çekilecek
-	//!Tabloda maplenerek gösterilecek
-	//!Pagination eklenecek
-	//!Edit butonu tıklanan rowun idsi ile /brand/update/id navigate edilecek
-	//!Delete olduğunda modal ile emin misin? modalı çıkartılacak
-	//!cevaba göre delete işlemi gerçekleştirelecek.
-	// QUICK EDIT / QUICK ADD
 	const confirmDelete = () => {
 		let brandService = new BrandService();
 		brandService.delete(brandToDelete.id).then(response => {
-			// silindiğinde yapılacak işlemler.
-			//? Direkt API'den verilerin son halini çek.
 			toastr.success("Marka başarıyla silindi.");
 			setPagination({page: 0, pageSize: 10});
 			setShowDeleteModal(false);
-			//? Silindiğine eminim, hafızadaki verileri buna göre uyarla.
-			// brandData = {page:0, size:15, items:[1,2,3]}
-			// brandData = {items:[1,2]}
-			// setBrandData({
-			// 	...brandData,
-			// 	items: brandData.items.filter(i => i.id != brandToDelete.id),
-			// });
 		});
 	};
 
@@ -64,6 +51,82 @@ export default function BrandList() {
 			.finally(() => {
 				setShowQuickAddForm(false);
 			});
+	};
+
+	const brandTableRowTemplate = brand => {
+		return (
+			<tr>
+				<th scope="row">{brand.id}</th>
+				<td>{brand.name}</td>
+				<td>
+					<button
+						className="btn btn-warning mx-1"
+						onClick={() => {
+							navigate("/brand/update/" + brand.id);
+						}}
+					>
+						Edit
+					</button>
+					<button
+						className="btn btn-success mx-1"
+						onClick={() => {
+							setEditingBrand(brand);
+						}}
+					>
+						Quick Edit
+					</button>
+					<button
+						className="btn btn-danger"
+						onClick={() => {
+							setBrandToDelete(brand);
+							setShowDeleteModal(true);
+						}}
+					>
+						Delete
+					</button>
+				</td>
+			</tr>
+		);
+	};
+
+	const brandEditTemplate = brand => {
+		return (
+			<tr>
+				<th scope="row">
+					<input
+						className="form-control"
+						name="id"
+						value={brand.id}
+						disabled
+					></input>
+				</th>
+				<td>
+					<input
+						className="form-control"
+						name="name"
+						value={brand.name}
+					></input>
+				</td>
+				<td>
+					<button
+						className="btn btn-success mx-1"
+						onClick={() => {
+							setEditingBrand(brand);
+						}}
+					>
+						Save
+					</button>
+					<button
+						className="btn btn-danger"
+						onClick={() => {
+							setEditingBrand({});
+						}}
+					>
+						Cancel
+					</button>
+				</td>
+			</tr>
+		);
 	};
 
 	return (
@@ -121,31 +184,11 @@ export default function BrandList() {
 						</tr>
 					</thead>
 					<tbody>
-						{brandData.items?.map(brand => (
-							<tr>
-								<th scope="row">{brand.id}</th>
-								<td>{brand.name}</td>
-								<td>
-									<button
-										className="btn btn-warning mx-1"
-										onClick={() => {
-											navigate("/brand/update/" + brand.id);
-										}}
-									>
-										Edit
-									</button>
-									<button
-										className="btn btn-danger"
-										onClick={() => {
-											setBrandToDelete(brand);
-											setShowDeleteModal(true);
-										}}
-									>
-										Delete
-									</button>
-								</td>
-							</tr>
-						))}
+						{brandData.items?.map(brand =>
+							editingBrand.id && editingBrand.id == brand.id
+								? brandEditTemplate(brand)
+								: brandTableRowTemplate(brand),
+						)}
 					</tbody>
 				</table>
 				<Pagination

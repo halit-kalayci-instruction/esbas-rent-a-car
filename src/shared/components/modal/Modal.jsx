@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect} from "react";
+import {useOverlay} from "../../contexts/OverlayContext";
 
 function Modal({
 	title,
@@ -11,6 +12,13 @@ function Modal({
 	onCloseClick,
 	show = true,
 }) {
+	// useRef
+	// primeReact toastr
+	// context ile bağlantı
+	const overlayContext = useOverlay();
+	useEffect(() => {
+		overlayContext.setShow(true);
+	}, [show]);
 	return (
 		<div
 			className={"modal " + (show ? " fade show d-block" : "")}
@@ -27,6 +35,7 @@ function Modal({
 							aria-label="Close"
 							onClick={() => {
 								onCloseClick();
+								overlayContext.setShow(false);
 							}}
 						></button>
 					</div>
@@ -44,6 +53,7 @@ function Modal({
 									data-bs-dismiss="modal"
 									onClick={() => {
 										cancelBtnClick();
+										overlayContext.setShow(false);
 									}}
 								>
 									{cancelBtnText ?? "Cancel"}

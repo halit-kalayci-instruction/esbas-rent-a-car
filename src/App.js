@@ -16,51 +16,50 @@ import CarList from './features/admin/car/carList/CarList';
 import ProtectedRoute from './shared/components/protected-route/ProtectedRoute'
 import BrandList from './features/admin/brand/brandList/BrandList';
 import AddBrand from './features/admin/brand/addBrand/AddBrand';
+import { OverlayContext, OverlayProvider, useOverlay } from './shared/contexts/OverlayContext';
+import { useContext, useEffect } from 'react';
 //react-router-dom
 
 // createContext, useContext
 function App() {
+  const overlayContext = useOverlay();
   return (
-    <AuthProvider>
-      <LoaderProvider>
-        <div className="App">
-          <Loader>
-          </Loader>
-          <Navbar />
-          <Routes>
-            <Route path="" element={<Homepage />} />
-            <Route path="homepage" element={<Homepage />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="car/add" element={<AddCar />} />
-            <Route path="car/update/:id"
-              element={
-                <ProtectedRoute roles={["Cars.Update"]}>
-                  <AddCar />
-                </ProtectedRoute>} />
-            <Route path="brand/list"
-              element={
-                <ProtectedRoute roles={["Admin", "Brands.Create", "Brands.Update", "Brands.Delete"]}>
-                  <BrandList />
-                </ProtectedRoute>} />
+    <div className="App">
+      {overlayContext.show && <div className='overlay'></div>}
+      <Loader />
+      <Navbar />
+      <Routes>
+        <Route path="" element={<Homepage />} />
+        <Route path="homepage" element={<Homepage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="car/add" element={<AddCar />} />
+        <Route path="car/update/:id"
+          element={
+            <ProtectedRoute roles={["Cars.Update"]}>
+              <AddCar />
+            </ProtectedRoute>} />
+        <Route path="brand/list"
+          element={
+            <ProtectedRoute roles={["Admin", "Brands.Create", "Brands.Update", "Brands.Delete"]}>
+              <BrandList />
+            </ProtectedRoute>} />
 
-            <Route path="brand/add"
-              element={
-                <ProtectedRoute roles={["Admin", "Brands.Create"]}>
-                  <AddBrand />
-                </ProtectedRoute>} />
+        <Route path="brand/add"
+          element={
+            <ProtectedRoute roles={["Admin", "Brands.Create"]}>
+              <AddBrand />
+            </ProtectedRoute>} />
 
-            <Route path="brand/update/:id"
-              element={
-                <ProtectedRoute roles={["Admin", "Brands.Update"]}>
-                  <AddBrand />
-                </ProtectedRoute>} />
+        <Route path="brand/update/:id"
+          element={
+            <ProtectedRoute roles={["Admin", "Brands.Update"]}>
+              <AddBrand />
+            </ProtectedRoute>} />
 
-            <Route path="car/list" element={<CarList />} />
-          </Routes>
-          <footer></footer>
-        </div>
-      </LoaderProvider>
-    </AuthProvider>
+        <Route path="car/list" element={<CarList />} />
+      </Routes>
+      <footer></footer>
+    </div>
   );
 }
 

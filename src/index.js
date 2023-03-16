@@ -7,18 +7,27 @@ import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from './store/configureStore';
 import './i18n'
+import { AuthProvider } from './shared/contexts/AuthContext';
+import { LoaderProvider } from './shared/contexts/LoaderContext';
+import { OverlayProvider } from './shared/contexts/OverlayContext';
 
 // TODO: App component dışındakileri farklı dosyada handle et.
 const store = configureStore();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider store={store}>
-    <React.StrictMode>
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    </React.StrictMode>
-  </Provider>
+  <AuthProvider>
+    <LoaderProvider>
+      <OverlayProvider>
+        <Provider store={store}>
+          <React.StrictMode>
+            <MemoryRouter>
+              <App />
+            </MemoryRouter>
+          </React.StrictMode>
+        </Provider>
+      </OverlayProvider>
+    </LoaderProvider>
+  </AuthProvider>
 );
 // CSR => Client Side Rendering
 // SSR => Server Side Rendering Next.JS

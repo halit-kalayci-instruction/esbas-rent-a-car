@@ -13,9 +13,11 @@ import {useTranslation} from "react-i18next";
 import {ROLES} from "../../constants/claimConstants";
 import {userHasRole} from "../../utils/auth-status/AuthStatus";
 import {NAVBAR_TYPES} from "../../../enviroment";
+import {useOverlay} from "../../contexts/OverlayContext";
 
 export default function Navbar() {
 	const authContext = useContext(AuthContext);
+	const overlayContext = useOverlay();
 	const dispatch = useDispatch();
 	const {t, i18n} = useTranslation();
 
@@ -125,6 +127,7 @@ export default function Navbar() {
 		let showNavbar = !hideNavbarRoutes.includes(pathname);
 		setShowNavbar(showNavbar);
 		console.log(authContext);
+		console.log(overlayContext);
 	}, [pathname]);
 
 	useEffect(() => {

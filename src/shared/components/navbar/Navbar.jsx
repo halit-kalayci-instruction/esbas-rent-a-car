@@ -20,94 +20,94 @@ export default function Navbar() {
 	const {t, i18n} = useTranslation();
 
 	//TODO: Dynamic Items
-	const menuItems = [
-		{
-			label: t("Homepage"),
-			icon: "pi pi-home",
-			command: () => {
-				navigate("/homepage");
-			},
-		},
-		{
-			label: t("login"),
-			icon: "pi pi-sign-in",
-			visible: !authContext.authInformation.authenticated,
-			command: () => {
-				navigate("/login");
-			},
-		},
-		{
-			label: t("register"),
-			icon: "pi pi-user-plus",
-			visible: !authContext.authInformation.authenticated,
-			command: () => {},
-		},
-		{
-			label: t("admin.dashboard"),
-			icon: "pi pi-shield",
-			visible: userHasRole(["Admin", "Cars.Create", "Cars.Update"]),
-			items: [
-				{
-					label: t("car.panel"),
-					visible: userHasRole([
-						"Admin",
-						"Cars.Create",
-						"Cars.Update",
-						"Cars.Delete",
-					]),
-					icon: "pi pi-car",
-					command: () => {
-						navigate("/car/list");
-					},
-				},
-				{
-					label: t("brand.panel"),
-					visible: userHasRole([
-						"Admin",
-						"Brands.Create",
-						"Brands.Update",
-						"Brands.Delete",
-					]),
-					icon: "pi pi-bookmark",
-					command: () => {
-						navigate("/brand/list");
-					},
-				},
-			],
-		},
-		{
-			label: t("logout"),
-			icon: "pi pi-user-minus",
-			visible: authContext.authInformation.authenticated,
-			command: () => {
-				// localstorage temizlemek
-				// reduxdaki state'i düzenlemek
-				// login page redirect UX
-				handleLogout();
-			},
-		},
-		{
-			label: i18n.resolvedLanguage == "en" ? "English" : "Türkçe",
-			icon: "pi pi-language",
-			items: [
-				{
-					label: "Türkçe",
-					icon: "",
-					command: () => {
-						i18n.changeLanguage("tr");
-					},
-				},
-				{
-					label: "English",
-					icon: "",
-					command: () => {
-						i18n.changeLanguage("en");
-					},
-				},
-			],
-		},
-	];
-	const [menu, setMenu] = useState(menuItems);
+	// const menuItems = [
+	// 	{
+	// 		label: t("Homepage"),
+	// 		icon: "pi pi-home",
+	// 		command: () => {
+	// 			navigate("/homepage");
+	// 		},
+	// 	},
+	// 	{
+	// 		label: t("login"),
+	// 		icon: "pi pi-sign-in",
+	// 		visible: !authContext.authInformation.authenticated,
+	// 		command: () => {
+	// 			navigate("/login");
+	// 		},
+	// 	},
+	// 	{
+	// 		label: t("register"),
+	// 		icon: "pi pi-user-plus",
+	// 		visible: !authContext.authInformation.authenticated,
+	// 		command: () => {},
+	// 	},
+	// 	{
+	// 		label: t("admin.dashboard"),
+	// 		icon: "pi pi-shield",
+	// 		visible: userHasRole(["Admin", "Cars.Create", "Cars.Update"]),
+	// 		items: [
+	// 			{
+	// 				label: t("car.panel"),
+	// 				visible: userHasRole([
+	// 					"Admin",
+	// 					"Cars.Create",
+	// 					"Cars.Update",
+	// 					"Cars.Delete",
+	// 				]),
+	// 				icon: "pi pi-car",
+	// 				command: () => {
+	// 					navigate("/car/list");
+	// 				},
+	// 			},
+	// {
+	// 	label: t("brand.panel"),
+	// 	visible: userHasRole([
+	// 		"Admin",
+	// 		"Brands.Create",
+	// 		"Brands.Update",
+	// 		"Brands.Delete",
+	// 	]),
+	// 	icon: "pi pi-bookmark",
+	// 	command: () => {
+	// 		navigate("/brand/list");
+	// 	},
+	// },
+	// 		],
+	// 	},
+	// 	{
+	// 		label: t("logout"),
+	// 		icon: "pi pi-user-minus",
+	// 		visible: authContext.authInformation.authenticated,
+	// 		command: () => {
+	// 			// localstorage temizlemek
+	// 			// reduxdaki state'i düzenlemek
+	// 			// login page redirect UX
+	// 			handleLogout();
+	// 		},
+	// 	},
+	// 	{
+	// 		label: i18n.resolvedLanguage == "en" ? "English" : "Türkçe",
+	// 		icon: "pi pi-language",
+	// 		items: [
+	// 			{
+	// 				label: "Türkçe",
+	// 				icon: "",
+	// 				command: () => {
+	// 					i18n.changeLanguage("tr");
+	// 				},
+	// 			},
+	// 			{
+	// 				label: "English",
+	// 				icon: "",
+	// 				command: () => {
+	// 					i18n.changeLanguage("en");
+	// 				},
+	// 			},
+	// 		],
+	// 	},
+	// ];
+	const [menu, setMenu] = useState([]);
 
 	const handleLogout = () => {
 		removeItem("token");
@@ -145,6 +145,21 @@ export default function Navbar() {
 		return true;
 	};
 
+	const mapMenuItem = menuItem => {
+		return {
+			...menuItem,
+			label: t(menuItem.label),
+			command: () => {
+				if (menuItem.type == NAVBAR_TYPES.URL) navigate(menuItem.navigateTo);
+				if (menuItem.type == NAVBAR_TYPES.LOGOUT) handleLogout();
+			},
+			visible: getVisibleStatus(menuItem),
+			items: menuItem.items?.map(subItem => {
+				return mapMenuItem(subItem);
+			}),
+		};
+	};
+
 	const fetchMenuItems = () => {
 		// Menüyü dinamikleştirme
 		// AXIOS
@@ -154,16 +169,7 @@ export default function Navbar() {
 			.then(json =>
 				setMenu(
 					json.map(menuItem => {
-						return {
-							...menuItem,
-							url: undefined,
-							label: t(menuItem.label),
-							command: () => {
-								if (menuItem.type == NAVBAR_TYPES.URL) navigate(menuItem.url);
-								if (menuItem.type == NAVBAR_TYPES.LOGOUT) handleLogout();
-							},
-							visible: getVisibleStatus(menuItem),
-						};
+						return mapMenuItem(menuItem);
 					}),
 				),
 			);

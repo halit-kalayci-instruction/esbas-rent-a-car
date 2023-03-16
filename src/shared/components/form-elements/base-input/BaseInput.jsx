@@ -2,6 +2,9 @@ import {ErrorMessage, Field} from "formik";
 import React from "react";
 import "./BaseInput.scss";
 export default function BaseInput(props) {
+	// default value
+	// props = {label:'TR',show:true}
+	const {show = true} = props;
 	return (
 		<>
 			<label>{props.label}</label>

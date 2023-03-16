@@ -13,6 +13,7 @@ export default function BrandList() {
 	const [pagination, setPagination] = useState({page: 0, pageSize: 10});
 	const [brandData, setBrandData] = useState({});
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
+	const [showAddModal, setShowAddModal] = useState(false);
 	const [brandToDelete, setBrandToDelete] = useState({});
 	const [showQuickAddForm, setShowQuickAddForm] = useState(false);
 	const [editingBrand, setEditingBrand] = useState({});
@@ -159,6 +160,26 @@ export default function BrandList() {
 		);
 	};
 
+	const addBrandTemplate = () => {
+		return (
+			<Formik
+				initialValues={{name: ""}}
+				onSubmit={values => {
+					addBrand(values);
+					setShowAddModal(false);
+				}}
+				validationSchema={quickAddValidatonSchema}
+			>
+				<Form>
+					<BaseInput name="name" type="text" label="Marka İsmi"></BaseInput>
+					<button className="btn btn-primary mt-2 w-100" type="submit">
+						Submit
+					</button>
+				</Form>
+			</Formik>
+		);
+	};
+
 	return (
 		<React.Fragment>
 			<div className="container mt-3">
@@ -166,7 +187,7 @@ export default function BrandList() {
 				<button
 					className="btn btn-primary"
 					onClick={() => {
-						navigate("/brand/add");
+						setShowAddModal(true);
 					}}
 				>
 					Yeni Ekle
@@ -252,7 +273,22 @@ export default function BrandList() {
 					}}
 				></Modal>
 			)}
+
+			{showAddModal && (
+				<Modal
+					title="Ekleme İşlemi"
+					body={addBrandTemplate()}
+					onCloseClick={() => {
+						setShowAddModal(false);
+					}}
+					cancelBtnClick={() => {
+						setShowAddModal(false);
+					}}
+					footer={<></>}
+				></Modal>
+			)}
 		</React.Fragment>
 	);
 }
 // && => JSX'de sol taraftaki ifade TRUE ise sağ taraftaki JSX'i render et
+// React LifeCycle

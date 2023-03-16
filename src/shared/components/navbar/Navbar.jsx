@@ -130,7 +130,20 @@ export default function Navbar() {
 
 	useEffect(() => {
 		fetchMenuItems();
-	}, []);
+	}, [authContext]);
+
+	const getVisibleStatus = item => {
+		let isAuthenticated = authContext.authInformation.authenticated;
+		if (isAuthenticated && !item.showAuth) return false;
+		if (item.authOnly && !isAuthenticated) return false;
+		if (
+			item.authOnly &&
+			item.roles.length > 0 &&
+			!authContext.hasPermission(item.roles)
+		)
+			return false;
+		return true;
+	};
 
 	const fetchMenuItems = () => {
 		// Menüyü dinamikleştirme
@@ -144,10 +157,12 @@ export default function Navbar() {
 						return {
 							...menuItem,
 							url: undefined,
+							label: t(menuItem.label),
 							command: () => {
 								if (menuItem.type == NAVBAR_TYPES.URL) navigate(menuItem.url);
-								if (menuItem.type == NAVBAR_TYPES.CODE) eval(menuItem.code);
+								if (menuItem.type == NAVBAR_TYPES.LOGOUT) handleLogout();
 							},
+							visible: getVisibleStatus(menuItem),
 						};
 					}),
 				),

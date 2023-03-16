@@ -42,7 +42,6 @@
 		"url": "",
 		"authOnly": true,
 		"showAuth": true,
-		"titles": ["CEO"],
 		"roles": ["Admin", "Cars.Create", "Cars.Update"],
 		"items": [
 			{

@@ -7,6 +7,7 @@ import {Form, Formik} from "formik";
 import BaseInput from "../../../../shared/components/form-elements/base-input/BaseInput";
 import * as Yup from "yup";
 import Modal from "../../../../shared/components/modal/Modal";
+import {useOverlay} from "../../../../shared/contexts/OverlayContext";
 
 //TODO: Edit popup
 export default function BrandList() {
@@ -18,6 +19,7 @@ export default function BrandList() {
 	const [showQuickAddForm, setShowQuickAddForm] = useState(false);
 	const [editingBrand, setEditingBrand] = useState({});
 	const navigate = useNavigate();
+	const overlayContext = useOverlay();
 
 	useEffect(() => {
 		fetchBrands();
@@ -167,6 +169,8 @@ export default function BrandList() {
 				onSubmit={values => {
 					addBrand(values);
 					setShowAddModal(false);
+					verlayContext.setShow(false);
+					o;
 				}}
 				validationSchema={quickAddValidatonSchema}
 			>

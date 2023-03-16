@@ -6,6 +6,7 @@ import toastr from "toastr";
 import {Form, Formik} from "formik";
 import BaseInput from "../../../../shared/components/form-elements/base-input/BaseInput";
 import * as Yup from "yup";
+import Modal from "../../../../shared/components/modal/Modal";
 
 //TODO: Edit popup
 export default function BrandList() {
@@ -234,51 +235,22 @@ export default function BrandList() {
 				></Pagination>
 			</div>
 			{showDeleteModal && (
-				<div class="modal fade show d-block" tabindex="-1">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title">Silme İşlemi</h5>
-								<button
-									type="button"
-									class="btn-close"
-									data-bs-dismiss="modal"
-									aria-label="Close"
-									onClick={() => {
-										setShowDeleteModal(false);
-									}}
-								></button>
-							</div>
-							<div class="modal-body">
-								<p>
-									{brandToDelete.name} isimli markayı silmek istediğinize emin
-									misiniz?
-								</p>
-							</div>
-							<div class="modal-footer">
-								<button
-									type="button"
-									class="btn btn-secondary"
-									data-bs-dismiss="modal"
-									onClick={() => {
-										setShowDeleteModal(false);
-									}}
-								>
-									Close
-								</button>
-								<button
-									onClick={() => {
-										confirmDelete();
-									}}
-									type="button"
-									class="btn btn-danger"
-								>
-									Delete
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
+				<Modal
+					title="Silme İşlemi"
+					body={
+						brandToDelete.name +
+						" isimli markayı silmek istediğinize emin misiniz?"
+					}
+					onCloseClick={() => {
+						setShowDeleteModal(false);
+					}}
+					cancelBtnClick={() => {
+						setShowDeleteModal(false);
+					}}
+					submitBtnClick={() => {
+						confirmDelete();
+					}}
+				></Modal>
 			)}
 		</React.Fragment>
 	);

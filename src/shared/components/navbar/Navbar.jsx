@@ -19,7 +19,6 @@ export default function Navbar() {
 	const dispatch = useDispatch();
 	const {t, i18n} = useTranslation();
 
-	//TODO: Dynamic Items
 	// const menuItems = [
 	// 	{
 	// 		label: t("Homepage"),
@@ -86,26 +85,26 @@ export default function Navbar() {
 	// 			handleLogout();
 	// 		},
 	// 	},
-	// 	{
-	// 		label: i18n.resolvedLanguage == "en" ? "English" : "Türkçe",
-	// 		icon: "pi pi-language",
-	// 		items: [
-	// 			{
-	// 				label: "Türkçe",
-	// 				icon: "",
-	// 				command: () => {
-	// 					i18n.changeLanguage("tr");
-	// 				},
+	// {
+	// 	label: i18n.resolvedLanguage == "en" ? "English" : "Türkçe",
+	// 	icon: "pi pi-language",
+	// 	items: [
+	// 		{
+	// 			label: "Türkçe",
+	// 			icon: "",
+	// 			command: () => {
+	// 				i18n.changeLanguage("tr");
 	// 			},
-	// 			{
-	// 				label: "English",
-	// 				icon: "",
-	// 				command: () => {
-	// 					i18n.changeLanguage("en");
-	// 				},
+	// 		},
+	// 		{
+	// 			label: "English",
+	// 			icon: "",
+	// 			command: () => {
+	// 				i18n.changeLanguage("en");
 	// 			},
-	// 		],
-	// 	},
+	// 		},
+	// 	],
+	// },
 	// ];
 	const [menu, setMenu] = useState([]);
 
@@ -131,6 +130,39 @@ export default function Navbar() {
 	useEffect(() => {
 		fetchMenuItems();
 	}, [authContext]);
+
+	useEffect(() => {
+		if (menu.length > 0 && menu.find(m => m.translator == true) == null) {
+			setMenu([
+				...menu,
+				{
+					label: i18n.resolvedLanguage == "en" ? "English" : "Türkçe",
+					icon: "pi pi-language",
+					translator: true,
+					items: [
+						{
+							label: "Türkçe",
+							icon: "",
+							command: () => {
+								i18n.changeLanguage("tr");
+							},
+						},
+						{
+							label: "English",
+							icon: "",
+							command: () => {
+								i18n.changeLanguage("en");
+							},
+						},
+					],
+				},
+			]);
+		}
+	}, [menu]);
+
+	useEffect(() => {
+		fetchMenuItems();
+	}, [i18n.resolvedLanguage]);
 
 	const getVisibleStatus = item => {
 		let isAuthenticated = authContext.authInformation.authenticated;
@@ -164,15 +196,18 @@ export default function Navbar() {
 		// Menüyü dinamikleştirme
 		// AXIOS
 		// FETCH
+
+		// Front-side cache
+		//TODO: Backend service
 		fetch("data/menu.json")
 			.then(response => response.json())
-			.then(json =>
+			.then(json => {
 				setMenu(
 					json.map(menuItem => {
 						return mapMenuItem(menuItem);
 					}),
-				),
-			);
+				);
+			});
 	};
 
 	return <div>{showNavbar && <Menubar model={menu} />}</div>;

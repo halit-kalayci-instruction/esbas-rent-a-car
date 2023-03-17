@@ -18,6 +18,7 @@ import BrandList from './features/admin/brand/brandList/BrandList';
 import AddBrand from './features/admin/brand/addBrand/AddBrand';
 import { OverlayContext, OverlayProvider, useOverlay } from './shared/contexts/OverlayContext';
 import { useContext, useEffect } from 'react';
+import Modal from './shared/components/modal/Modal';
 //react-router-dom
 
 // createContext, useContext
@@ -25,6 +26,7 @@ function App() {
   const overlayContext = useOverlay();
   return (
     <div className="App">
+      <Modal></Modal>
       {overlayContext.show && <div className='overlay'></div>}
       <Loader />
       <Navbar />

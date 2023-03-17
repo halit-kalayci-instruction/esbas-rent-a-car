@@ -13,8 +13,6 @@ import {useOverlay} from "../../../../shared/contexts/OverlayContext";
 export default function BrandList() {
 	const [pagination, setPagination] = useState({page: 0, pageSize: 10});
 	const [brandData, setBrandData] = useState({});
-	const [showDeleteModal, setShowDeleteModal] = useState(false);
-	const [showAddModal, setShowAddModal] = useState(false);
 	const [brandToDelete, setBrandToDelete] = useState({});
 	const [showQuickAddForm, setShowQuickAddForm] = useState(false);
 	const [editingBrand, setEditingBrand] = useState({});
@@ -24,6 +22,26 @@ export default function BrandList() {
 	useEffect(() => {
 		fetchBrands();
 	}, [pagination]);
+
+	useEffect(() => {
+		if (brandToDelete.id) {
+			overlayContext.setAndShow({
+				title: "Silme İşlemi",
+				body:
+					brandToDelete.name +
+					" isimli markayı silmek istediğinize emin misiniz?",
+				onCloseClick: () => {
+					overlayContext.setShow(false);
+				},
+				cancelBtnClick: () => {
+					overlayContext.setShow(false);
+				},
+				submitBtnClick: () => {
+					confirmDelete();
+				},
+			});
+		}
+	}, [brandToDelete]);
 
 	const fetchBrands = () => {
 		let brandService = new BrandService();
@@ -36,7 +54,7 @@ export default function BrandList() {
 		brandService.delete(brandToDelete.id).then(response => {
 			toastr.success("Marka başarıyla silindi.");
 			setPagination({page: 0, pageSize: 10});
-			setShowDeleteModal(false);
+			overlayContext.setShow(false);
 		});
 	};
 
@@ -88,7 +106,6 @@ export default function BrandList() {
 						className="btn btn-danger"
 						onClick={() => {
 							setBrandToDelete(brand);
-							setShowDeleteModal(true);
 						}}
 					>
 						Delete
@@ -168,9 +185,7 @@ export default function BrandList() {
 				initialValues={{name: ""}}
 				onSubmit={values => {
 					addBrand(values);
-					setShowAddModal(false);
-					verlayContext.setShow(false);
-					o;
+					overlayContext.setShow(false);
 				}}
 				validationSchema={quickAddValidatonSchema}
 			>
@@ -191,7 +206,18 @@ export default function BrandList() {
 				<button
 					className="btn btn-primary"
 					onClick={() => {
-						setShowAddModal(true);
+						overlayContext.setAndShow({
+							title: "Ekleme İşlemi",
+							body: addBrandTemplate(),
+							onCloseClick: () => {
+								overlayContext.setShow(false);
+							},
+							cancelBtnClick: () => {
+								overlayContext.setShow(false);
+							},
+							footer: <></>,
+							reRender: false,
+						});
 					}}
 				>
 					Yeni Ekle
@@ -259,38 +285,6 @@ export default function BrandList() {
 					}}
 				></Pagination>
 			</div>
-			{showDeleteModal && (
-				<Modal
-					title="Silme İşlemi"
-					body={
-						brandToDelete.name +
-						" isimli markayı silmek istediğinize emin misiniz?"
-					}
-					onCloseClick={() => {
-						setShowDeleteModal(false);
-					}}
-					cancelBtnClick={() => {
-						setShowDeleteModal(false);
-					}}
-					submitBtnClick={() => {
-						confirmDelete();
-					}}
-				></Modal>
-			)}
-
-			{showAddModal && (
-				<Modal
-					title="Ekleme İşlemi"
-					body={addBrandTemplate()}
-					onCloseClick={() => {
-						setShowAddModal(false);
-					}}
-					cancelBtnClick={() => {
-						setShowAddModal(false);
-					}}
-					footer={<></>}
-				></Modal>
-			)}
 		</React.Fragment>
 	);
 }

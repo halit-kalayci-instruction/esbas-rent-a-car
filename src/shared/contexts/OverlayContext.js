@@ -10,9 +10,27 @@ export const useOverlay = () => {
 
 export const OverlayProvider = ({ children }) => {
 
-    const [show, setShow] = useState(false)
+    const [show, setShow] = useState(false);
+    const [modalInformation, setModalInformation] = useState({
+        title: "",
+        cancelBtnText: "Cancel",
+        submitBtnText: "Submit",
+        body: <></>,
+        footer: undefined,
+        show: true,
+        submitBtnClick: () => { },
+        onCloseClick: () => { },
+        cancelBtnClick: () => { },
+        reRender: true
+    })
 
-    return <OverlayContext.Provider value={{ show, setShow }}>
+
+    const setAndShow = (modalInfo) => {
+        setModalInformation({ ...modalInformation, ...modalInfo });
+        setShow(true);
+    }
+
+    return <OverlayContext.Provider value={{ show, setShow, modalInformation, setModalInformation, setAndShow }}>
         {children}
     </OverlayContext.Provider>
 }

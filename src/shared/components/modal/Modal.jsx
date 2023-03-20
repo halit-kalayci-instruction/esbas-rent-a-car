@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useOverlay} from "../../contexts/OverlayContext";
 
 function Modal() {
@@ -13,8 +13,8 @@ function Modal() {
 	}, [overlayContext]);
 
 	const getReRenderStatus = () => {
-		if (!overlayContext.reRender) return overlayContext.show;
-		return overlayContext.reRender && overlayContext.show;
+		if (!overlayContext.modalInformation.reRender) return overlayContext.show;
+		return overlayContext.modalInformation.reRender && overlayContext.show;
 	};
 	return (
 		getReRenderStatus() && (

@@ -6,12 +6,12 @@ import toastr from "toastr";
 import {Form, Formik} from "formik";
 import BaseInput from "../../../../shared/components/form-elements/base-input/BaseInput";
 import * as Yup from "yup";
-import Modal from "../../../../shared/components/modal/Modal";
 import {useOverlay} from "../../../../shared/contexts/OverlayContext";
 
 //TODO: Edit popup
 export default function BrandList() {
-	const [pagination, setPagination] = useState({page: 0, pageSize: 10});
+	const initialPage = {page: 0, pageSize: 10};
+	const [pagination, setPagination] = useState(initialPage);
 	const [brandData, setBrandData] = useState({});
 	const [brandToDelete, setBrandToDelete] = useState({});
 	const [showQuickAddForm, setShowQuickAddForm] = useState(false);
@@ -39,6 +39,7 @@ export default function BrandList() {
 				submitBtnClick: () => {
 					confirmDelete();
 				},
+				footer: undefined,
 			});
 		}
 	}, [brandToDelete]);
@@ -53,7 +54,7 @@ export default function BrandList() {
 		let brandService = new BrandService();
 		brandService.delete(brandToDelete.id).then(response => {
 			toastr.success("Marka başarıyla silindi.");
-			setPagination({page: 0, pageSize: 10});
+			setPagination(initialPage);
 			overlayContext.setShow(false);
 		});
 	};
@@ -73,11 +74,52 @@ export default function BrandList() {
 			.add(values)
 			.then(response => {
 				toastr.success("Marka başarıyla eklendi.");
-				setPagination({page: 0, pageSize: 10});
+				setPagination(initialPage);
 			})
 			.finally(() => {
 				setShowQuickAddForm(false);
 			});
+	};
+
+	const editBrandTemplate = brand => {
+		return (
+			<Formik
+				initialValues={{id: brand.id, name: brand.name}}
+				onSubmit={values => {
+					update(values);
+					overlayContext.setShow(false);
+				}}
+				validationSchema={quickEditValidationSchema}
+			>
+				<Form>
+					<BaseInput
+						isDisabled="true"
+						name="id"
+						type="text"
+						label="ID"
+					></BaseInput>
+					<BaseInput name="name" type="text" label="Marka İsmi"></BaseInput>
+					<button className="btn btn-primary mt-2 w-100" type="submit">
+						Submit
+					</button>
+				</Form>
+			</Formik>
+		);
+	};
+
+	const openEditModal = brand => {
+		overlayContext.setAndShow({
+			title: "Güncelleme İşlemi - " + brand.name,
+			body: editBrandTemplate(brand),
+			onCloseClick: () => {
+				overlayContext.setShow(false);
+			},
+			cancelBtnClick: () => {
+				overlayContext.setShow(false);
+			},
+			footer: <></>,
+			reRender: false,
+		});
 	};
 
 	const brandTableRowTemplate = brand => {
@@ -89,7 +131,7 @@ export default function BrandList() {
 					<button
 						className="btn btn-warning mx-1"
 						onClick={() => {
-							navigate("/brand/update/" + brand.id);
+							openEditModal(brand);
 						}}
 					>
 						Edit
@@ -120,7 +162,7 @@ export default function BrandList() {
 		brandService.update(brand).then(response => {
 			toastr.success("Marka başarıyla güncellendi");
 			setEditingBrand({});
-			setPagination({page: 0, pageSize: 10});
+			setPagination(initialPage);
 		});
 	};
 

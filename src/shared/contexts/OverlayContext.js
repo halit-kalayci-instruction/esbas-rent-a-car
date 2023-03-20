@@ -16,12 +16,12 @@ export const OverlayProvider = ({ children }) => {
         cancelBtnText: "Cancel",
         submitBtnText: "Submit",
         body: <></>,
-        footer: undefined,
         show: true,
         submitBtnClick: () => { },
         onCloseClick: () => { },
         cancelBtnClick: () => { },
-        reRender: true
+        reRender: true,
+        footer: undefined
     })
 
 

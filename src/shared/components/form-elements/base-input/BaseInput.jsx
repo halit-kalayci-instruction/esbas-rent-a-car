@@ -9,7 +9,12 @@ export default function BaseInput(props) {
 		<>
 			<label>{props.label}</label>
 			<div className="d-flex justify-content-center flex-direction-row position-relative">
-				<Field className="form-control" name={props.name} type={props.type} />
+				<Field
+					disabled={props.isDisabled}
+					className="form-control"
+					name={props.name}
+					type={props.type}
+				/>
 				{props.icon && (
 					<i
 						onClick={props.onIconClick}

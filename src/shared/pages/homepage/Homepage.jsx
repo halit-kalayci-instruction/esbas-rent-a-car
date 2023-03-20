@@ -1,4 +1,10 @@
-import React, {useContext, useEffect, useMemo, useState} from "react";
+import React, {
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import CarCard from "../../../features/car/components/car-card/CarCard";
 import CarService from "../../../features/car/services/carService";
 import "./Homepage.scss";
@@ -7,6 +13,7 @@ import {useDispatch} from "react-redux";
 import {getAllCars, getAllCarsAsync} from "../../../store/actions/carActions";
 import BrandService from "../../../features/brand/services/brandService";
 import {AuthContext} from "../../contexts/AuthContext";
+import Hooks from "../../components/hooks/Hooks";
 
 export default function Homepage() {
 	// Redux
@@ -14,19 +21,7 @@ export default function Homepage() {
 	const [data, setData] = useState({});
 	const [pageSize, setpageSize] = useState(1);
 	const dispatch = useDispatch();
-	const [number, setNumber] = useState(0);
-
-	const expensiveFunction = parameter => {
-		// Fazla kaynak tüketen bir kod bloğu
-		console.log("Expensive Function çağırıldı..");
-		for (let i = 0; i < 10; i++) {
-			parameter += i;
-		}
-		return parameter * 100;
-	};
-	// useMemo
-	const calculation = useMemo(() => expensiveFunction(number), [number]);
-	// useCallback
+	const i = 0;
 
 	useEffect(() => {
 		fetchCarData();
@@ -34,10 +29,8 @@ export default function Homepage() {
 	}, [pageSize]);
 	// Circular Hook Call
 
-	useEffect(() => {
-		console.log(calculation);
-	}, [number]);
-
+	// <a1235>
+	// <b67845>
 	const fetchCarData = (page = 0) => {
 		let carService = new CarService();
 		carService.getAll(page, pageSize).then(response => {
@@ -52,6 +45,7 @@ export default function Homepage() {
 		});
 	};
 
+	// 2 -> 11
 	const setPage = page => {
 		fetchCarData(page);
 	};
@@ -76,13 +70,7 @@ export default function Homepage() {
 				onPageChange={setPage}
 				onPageSizeChange={setPageSize}
 			></Pagination>
-			<input
-				type="number"
-				onBlur={event => {
-					setNumber(event.target.value);
-				}}
-				className="form-control"
-			></input>
+			<Hooks />
 		</div>
 	);
 }

@@ -23,6 +23,42 @@ export default function Homepage() {
 	const dispatch = useDispatch();
 	const i = 0;
 
+	// { modelId:6, minKilometer:500, maxModelYear:2021 }
+
+	const testDynamic = () => {
+		// {field:"modelId", operator:"eq", value:"6"}
+		// {field:"kilometer",operator:"gt",value:100}
+		// {field:"kilometer",operator:"lt",value:600}
+		let object = {
+			modelId: {fieldName: "ModelId", operator: "eq", value: "6"},
+			MinKilometer: {fieldName: "Kilometer", operator: "gt", value: "500"},
+			MaxKilometer: {fieldName: "Kilometer", operator: "lt", value: "5000"},
+			ModelYear: {fieldName: "ModelYear", operator: "eq", value: "3000"},
+		};
+
+		let obj2 = {
+			field: "modelId",
+			value: object.modelId.value,
+			operator: "eq",
+			logic: "and",
+			filters: [],
+		};
+
+		for (const [key, value] of Object.entries(object)) {
+			// obj2 = {...obj2, filters: [...filters, {}]};
+			obj2.filters.push({
+				field: value.fieldName,
+				value: value.value,
+				operator: value.operator,
+			});
+		}
+		console.log(obj2);
+	};
+
+	useEffect(() => {
+		testDynamic();
+	}, []);
+
 	useEffect(() => {
 		fetchCarData();
 		//fetchBrandData();
@@ -70,7 +106,7 @@ export default function Homepage() {
 				onPageChange={setPage}
 				onPageSizeChange={setPageSize}
 			></Pagination>
-			<Hooks />
+			{/* <Hooks /> */}
 		</div>
 	);
 }

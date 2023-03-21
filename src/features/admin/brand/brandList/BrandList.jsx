@@ -8,7 +8,6 @@ import BaseInput from "../../../../shared/components/form-elements/base-input/Ba
 import * as Yup from "yup";
 import {useOverlay} from "../../../../shared/contexts/OverlayContext";
 
-//TODO: Edit popup
 export default function BrandList() {
 	const initialPage = {page: 0, pageSize: 10};
 	const [pagination, setPagination] = useState(initialPage);

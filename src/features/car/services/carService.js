@@ -5,6 +5,11 @@ export default class CarService {
         return instance.get(`Cars?Page=${page}&PageSize=${pageSize}`, { headers: { "X-Disable-Interceptor": "true" } })
     }
 
+    getAllDynamic(pageInfo, dynamic) {
+        const { page = 0, pageSize = 10 } = pageInfo;
+        return instance.post(`Cars/GetList/ByDynamic?Page=${page}&PageSize=${pageSize}`, dynamic)
+    }
+
     getById(id) {
         return instance.get("Cars/" + id);
     }

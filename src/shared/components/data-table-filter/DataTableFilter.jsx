@@ -388,9 +388,26 @@ export default function DataTableFilter() {
 						value: constraint.value,
 					});
 				});
-
-				console.log(obj);
 			} else {
+				if (!filter.value || filter.value == null) continue;
+				let obj2 = {};
+				if (filter.matchMode == FilterMatchMode.BETWEEN) {
+					obj2 = {
+						field: field,
+						operator: "gt",
+						value: filter.value[0],
+						logic: "and",
+						filters: [{field: field, operator: "lt", value: filter.value[1]}],
+					};
+					console.log(obj2);
+				} else {
+					obj2 = {
+						field: field,
+						operator: filter.matchMode,
+						value: filter.value,
+					};
+					console.log(obj2);
+				}
 			}
 		}
 	};

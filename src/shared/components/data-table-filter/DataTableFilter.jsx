@@ -359,8 +359,21 @@ export default function DataTableFilter() {
 	};
 
 	const translateFilterToBackend = filterObject => {
-		console.log(filterObject);
-		let filterObj = {};
+		// Sadece filtreleme yapılan alanları getir.
+		let filtersToUse = Object.entries(filterObject.filters).filter(
+			i =>
+				(i[1].constraints &&
+					i[1].constraints.some(c => c.value && c.value != null)) ||
+				(i[1].value && i[1].value != null),
+		);
+
+		let parentFilter = {
+			field: filtersToUse[0][0],
+			operator: filtersToUse[0][1].constraints[0].matchMode,
+			value: filtersToUse[0][1].constraints[0].value,
+			logic: filtersToUse[0][1].operator,
+			filters: [],
+		};
 
 		for (const [field, filter] of Object.entries(filterObject.filters)) {
 			if (field == "global") continue;
@@ -387,6 +400,7 @@ export default function DataTableFilter() {
 						operator: constraint.matchMode,
 						value: constraint.value,
 					});
+					parentFilter.filters.push(obj);
 				});
 			} else {
 				if (!filter.value || filter.value == null) continue;
@@ -408,6 +422,7 @@ export default function DataTableFilter() {
 					};
 					console.log(obj2);
 				}
+				parentFilter.filters.push(obj2);
 			}
 		}
 	};

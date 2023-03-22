@@ -358,6 +358,7 @@ export default function DataTableFilter() {
 		//TODO
 	};
 
+	//TODO: Chartlar
 	const translateFilterToBackend = filterObject => {
 		// Sadece filtreleme yapılan alanları getir.
 		let filtersToUse = Object.entries(filterObject.filters).filter(
@@ -375,7 +376,9 @@ export default function DataTableFilter() {
 			filters: [],
 		};
 
-		for (const [field, filter] of Object.entries(filterObject.filters)) {
+		filtersToUse.shift();
+
+		for (const [field, filter] of filtersToUse) {
 			if (field == "global") continue;
 			// constraints alanı var mı?
 			if (
@@ -425,6 +428,7 @@ export default function DataTableFilter() {
 				parentFilter.filters.push(obj2);
 			}
 		}
+		console.log(parentFilter);
 	};
 
 	return (

@@ -19,6 +19,7 @@ import AddBrand from './features/admin/brand/addBrand/AddBrand';
 import { OverlayContext, OverlayProvider, useOverlay } from './shared/contexts/OverlayContext';
 import { useContext, useEffect } from 'react';
 import Modal from './shared/components/modal/Modal';
+import DataTableFilter from './shared/components/data-table-filter/DataTableFilter';
 //react-router-dom
 
 // createContext, useContext
@@ -32,6 +33,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="" element={<Homepage />} />
+        <Route path="data" element={<DataTableFilter />} />
         <Route path="homepage" element={<Homepage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="car/add" element={<AddCar />} />

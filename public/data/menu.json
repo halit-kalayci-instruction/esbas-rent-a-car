@@ -18,6 +18,15 @@
 		"roles": []
 	},
 	{
+		"label": "Data Table",
+		"icon": "pi pi-sign-in",
+		"type": 0,
+		"navigateTo": "/data",
+		"authOnly": false,
+		"showAuth": true,
+		"roles": []
+	},
+	{
 		"label": "register",
 		"icon": "pi pi-user-plus",
 		"type": 0,

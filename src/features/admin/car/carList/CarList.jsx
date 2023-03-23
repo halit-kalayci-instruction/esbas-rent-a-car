@@ -14,6 +14,9 @@ import {Dropdown} from "primereact/dropdown";
 import {Tag} from "primereact/tag";
 import {AuthContext} from "../../../../shared/contexts/AuthContext";
 import {userHasRole} from "../../../../shared/utils/auth-status/AuthStatus";
+import {FilterMatchMode, FilterOperator} from "primereact/api";
+import {Slider} from "primereact/slider";
+import {translateFilterToBackend} from "../../../../core/utils/dataTableExtensions";
 function CarList() {
 	// Her bir satır için düzenle/sil butonlarının click aksiyonunu ata
 	// Listelemeye genel bir search ekle
@@ -29,10 +32,12 @@ function CarList() {
 	const [carToDelete, setCarToDelete] = useState({});
 	const [models, setModels] = useState([]);
 	const [modelChanged, setModelChanged] = useState(false);
+	const [filters, setFilters] = useState(null);
 
 	useEffect(() => {
 		fetchCars();
 		fetchModels();
+		initFilters();
 	}, [pagination]);
 
 	const fetchModels = () => {
@@ -140,6 +145,48 @@ function CarList() {
 		);
 	};
 
+	const initFilters = () => {
+		setFilters({
+			"Model.Brand.Name": {
+				operator: FilterOperator.AND,
+				constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}],
+			},
+			"Model.Name": {
+				operator: FilterOperator.AND,
+				constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}],
+			},
+			plate: {
+				operator: FilterOperator.AND,
+				constraints: [{value: null, matchMode: FilterMatchMode.CONTAINS}],
+			},
+			kilometer: {value: null, matchMode: FilterMatchMode.BETWEEN},
+		});
+	};
+
+	const filterKilometerTemplate = options => {
+		return (
+			<>
+				<Slider
+					min={1000}
+					max={10000}
+					value={options.value}
+					onChange={e => options.filterCallback(e.value)}
+					range
+					className="m-3"
+				></Slider>
+				<div className="flex align-items-center justify-content-between px-2">
+					<span>{options.value ? options.value[0] : 0} -</span>
+					<span> {options.value ? options.value[1] : 100}</span>
+				</div>
+			</>
+		);
+	};
+
+	const translateFilter = filterObject => {
+		let backendFilterObj = translateFilterToBackend(filterObject);
+		console.log(backendFilterObj);
+	};
+
 	//TODO: Actions with row editor, row editor icons
 	return (
 		<div className="container mt-3">
@@ -155,22 +202,35 @@ function CarList() {
 						editMode="row"
 						dataKey="id"
 						onRowEditComplete={rowEdit}
+						filters={filters}
+						onFilter={translateFilter}
 					>
 						<Column field="id" header="ID"></Column>
-						<Column field="brandName" header="Brand Name"></Column>
+						<Column
+							field="brandName"
+							filter
+							filterField="Model.Brand.Name"
+							header="Brand Name"
+						></Column>
 						<Column
 							field="modelName"
 							header="Model Name"
+							filterField="Model.Name"
+							filter
 							editor={options => ModelSelector(options)}
 						></Column>
 						<Column
 							field="plate"
 							header="Plate"
+							filter
 							editor={options => TextEditor(options)}
 						></Column>
 						<Column
 							field="kilometer"
 							header="Kilometer"
+							filter
+							showFilterMatchModes={false}
+							filterElement={filterKilometerTemplate}
 							editor={options => TextEditor(options)}
 						></Column>
 						<Column

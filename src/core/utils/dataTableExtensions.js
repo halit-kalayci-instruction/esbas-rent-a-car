@@ -10,6 +10,7 @@ export const translateFilterToBackend = filterObject => {
                 i.filter.constraints.some(c => c.value && c.value != null)) ||
             (i.filter.value && i.filter.value != null),
     );
+    if (filtersToUse.length <= 0) return {};
     let firstFilter = filtersToUse[0];
 
     let parentFilter = getFilterObject(firstFilter.field, firstFilter.filter);
@@ -35,7 +36,7 @@ const getFilterObject = (field, filter) => {
         let obj = {
             field: field,
             logic: filter.operator,
-            operator: filter.constraints[0].matchMode,
+            operator: getBackendMatchMode(filter.constraints[0].matchMode),
             value: filter.constraints[0].value,
             filters: [],
         };
@@ -44,7 +45,7 @@ const getFilterObject = (field, filter) => {
             obj.filters.push({
                 field: field,
                 logic: filter.operator,
-                operator: constraint.matchMode,
+                operator: getBackendMatchMode(constraint.matchMode),
                 value: constraint.value,
             });
         });
@@ -65,10 +66,19 @@ const getFilterObject = (field, filter) => {
         } else {
             obj2 = {
                 field: field,
-                operator: filter.matchMode,
+                operator: getBackendMatchMode(filter.matchMode),
                 value: filter.value,
             };
             return obj2;
         }
     }
 };
+
+
+const getBackendMatchMode = (matchMode) => {
+    let backendMatchMode = matchMode.toLowerCase();
+    if (matchMode == FilterMatchMode.EQUALS) return "eq"
+    if (matchMode == FilterMatchMode.NOT_EQUALS) return "neq"
+    if (matchMode == FilterMatchMode.NOT_CONTAINS) return "doesnotcontain"
+    return backendMatchMode;
+}

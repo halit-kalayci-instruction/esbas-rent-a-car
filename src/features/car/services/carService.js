@@ -6,7 +6,6 @@ export default class CarService {
     }
 
     getAllDynamic(pageInfo, dynamic) {
-        debugger;
         const { page = 0, pageSize = 10 } = pageInfo;
         return instance.post(`Cars/GetList/ByDynamic?Page=${page}&PageSize=${pageSize}`, dynamic)
     }

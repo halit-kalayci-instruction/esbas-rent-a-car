@@ -86,7 +86,7 @@ function CarList() {
 		return (
 			<>
 				<Button
-					disabled={!userHasRole(["Cars.Update"])}
+					disabled={!userHasRole(["Cars.Update", "Admin"])}
 					onClick={() => {
 						navigate("/car/update/" + car.id);
 					}}
@@ -105,11 +105,16 @@ function CarList() {
 	};
 
 	const rowEdit = edit => {
-		const updateData = {...edit.newData, modelId: edit.newData.modelName};
+		const updateData = {
+			...edit.newData,
+			modelId: modelChanged
+				? edit.newData.modelName
+				: data.items.find(i => i.id == edit.newData.id).modelId,
+		};
 		let carService = new CarService();
 		carService.update(updateData).then(response => {
 			toastr.success("Araba başarıyla güncellendi..");
-			fetchCars();
+			fetchCarsWithFilters(backendFilter);
 		});
 	};
 
@@ -129,6 +134,7 @@ function CarList() {
 	};
 
 	const ModelSelector = options => {
+		console.log(options);
 		return (
 			<select
 				className="form-select"
@@ -137,7 +143,11 @@ function CarList() {
 					options.editorCallback(e.target.value);
 				}}
 				value={
-					modelChanged ? options.rowData.modelName : options.rowData.modelId
+					modelChanged
+						? options.rowData.modelName
+						: options.rowData.modelId
+						? options.rowData.modelId
+						: data.items.find(i => i.id == edit.newData.id).modelId
 				}
 			>
 				{models.map(model => (

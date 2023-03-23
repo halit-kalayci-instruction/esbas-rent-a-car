@@ -37,7 +37,7 @@ const getFilterObject = (field, filter) => {
             field: field,
             logic: filter.operator,
             operator: getBackendMatchMode(filter.constraints[0].matchMode),
-            value: filter.constraints[0].value,
+            value: filter.constraints[0].value.toString(),
             filters: [],
         };
         filter.constraints.shift();
@@ -46,7 +46,7 @@ const getFilterObject = (field, filter) => {
                 field: field,
                 logic: filter.operator,
                 operator: getBackendMatchMode(constraint.matchMode),
-                value: constraint.value,
+                value: constraint.value.toString(),
             });
         });
 
@@ -58,16 +58,16 @@ const getFilterObject = (field, filter) => {
             obj2 = {
                 field: field,
                 operator: "gt",
-                value: filter.value[0],
+                value: filter.value[0].toString(),
                 logic: "and",
-                filters: [{ field: field, operator: "lt", value: filter.value[1] }],
+                filters: [{ field: field, operator: "lt", value: filter.value[1].toString() }],
             };
             return obj2;
         } else {
             obj2 = {
                 field: field,
                 operator: getBackendMatchMode(filter.matchMode),
-                value: filter.value,
+                value: filter.value.toString(),
             };
             return obj2;
         }

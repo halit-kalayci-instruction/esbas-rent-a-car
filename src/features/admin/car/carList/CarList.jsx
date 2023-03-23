@@ -33,12 +33,16 @@ function CarList() {
 	const [models, setModels] = useState([]);
 	const [modelChanged, setModelChanged] = useState(false);
 	const [filters, setFilters] = useState(null);
+	const [backendFilter, setBackendFilter] = useState({});
 
 	useEffect(() => {
-		fetchCars();
+		fetchCarsWithFilters(backendFilter);
 		fetchModels();
-		initFilters();
 	}, [pagination]);
+
+	useEffect(() => {
+		initFilters();
+	}, []);
 
 	const fetchModels = () => {
 		let modelService = new ModelService();
@@ -182,9 +186,21 @@ function CarList() {
 		);
 	};
 
+	const fetchCarsWithFilters = filter => {
+		let carService = new CarService();
+		carService.getAllDynamic(pagination, filter).then(response => {
+			setData(response.data);
+		});
+	};
+
 	const translateFilter = filterObject => {
 		let backendFilterObj = translateFilterToBackend(filterObject);
-		console.log(backendFilterObj);
+		let object = {};
+		if (backendFilterObj.field) {
+			object = {filter: backendFilterObj};
+		}
+		setBackendFilter(object);
+		fetchCarsWithFilters(object);
 	};
 
 	//TODO: Actions with row editor, row editor icons

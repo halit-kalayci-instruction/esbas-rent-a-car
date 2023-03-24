@@ -1,5 +1,15 @@
 [
 	{
+		"id": 1,
+		"title": "Ana Sayfa",
+		"parentId": 0,
+		"target": "/homepage",
+		"imgUrl": "pi pi-home",
+		"navigateUrl": "",
+		"rowOrder": 0,
+		"type": 0
+	},
+	{
 		"label": "homepage",
 		"icon": "pi pi-home",
 		"type": 0,
@@ -60,7 +70,8 @@
 				"showAuth": true,
 				"roles": ["Admin", "Cars.Create", "Cars.Update"],
 				"type": 0,
-				"navigateTo": "/car/list"
+				"navigateTo": "/car/list",
+				"items": []
 			},
 			{
 				"label": "brand.panel",

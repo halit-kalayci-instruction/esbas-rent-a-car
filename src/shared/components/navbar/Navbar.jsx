@@ -14,6 +14,7 @@ import {ROLES} from "../../constants/claimConstants";
 import {userHasRole} from "../../utils/auth-status/AuthStatus";
 import {NAVBAR_TYPES} from "../../../enviroment";
 import {useOverlay} from "../../contexts/OverlayContext";
+import {GroupTreeContentService} from "../../../features/groupTreeContent/services/groupTreeContentService";
 
 export default function Navbar() {
 	const authContext = useContext(AuthContext);
@@ -168,49 +169,45 @@ export default function Navbar() {
 	}, [i18n.resolvedLanguage]);
 
 	const getVisibleStatus = item => {
+		if (!item.roles || item.roles.length <= 0) return true;
 		let isAuthenticated = authContext.authInformation.authenticated;
-		if (isAuthenticated && !item.showAuth) return false;
-		if (item.authOnly && !isAuthenticated) return false;
-		if (
-			item.authOnly &&
-			item.roles.length > 0 &&
-			!authContext.hasPermission(item.roles)
-		)
-			return false;
-		return true;
+		if (!isAuthenticated) return false;
+		return authContext.hasPermission(item.roles);
 	};
 
-	const mapMenuItem = menuItem => {
-		return {
-			...menuItem,
-			label: t(menuItem.label),
+	const mapMenuItem = (allMenu, menuItem) => {
+		let newMenuItem = {
+			label: t(menuItem.title),
 			command: () => {
-				if (menuItem.type == NAVBAR_TYPES.URL) navigate(menuItem.navigateTo);
+				if (menuItem.type == NAVBAR_TYPES.URL) navigate(menuItem.target);
+				if (menuItem.type == NAVBAR_TYPES.REDIRECT)
+					window.open(menuItem.navigateUrl);
 				if (menuItem.type == NAVBAR_TYPES.LOGOUT) handleLogout();
 			},
+			icon: menuItem.imgUrl,
 			visible: getVisibleStatus(menuItem),
-			items: menuItem.items?.map(subItem => {
-				return mapMenuItem(subItem);
-			}),
+			items: allMenu
+				.filter(i => i.parentId == menuItem.id)
+				.map(subItem => {
+					return mapMenuItem(allMenu, subItem);
+				}),
 		};
+		if (newMenuItem.items?.length <= 0) {
+			newMenuItem = {...newMenuItem, items: undefined};
+		}
+		return newMenuItem;
 	};
 
 	const fetchMenuItems = () => {
-		// Menüyü dinamikleştirme
-		// AXIOS
-		// FETCH
-
-		// Front-side cache
-		//TODO: Backend service
-		fetch("data/menu.json")
-			.then(response => response.json())
-			.then(json => {
-				setMenu(
-					json.map(menuItem => {
-						return mapMenuItem(menuItem);
-					}),
-				);
-			});
+		let groupTreeContentService = new GroupTreeContentService();
+		groupTreeContentService.getAll().then(response => {
+			console.log(response.data);
+			setMenu(
+				response.data
+					.filter(i => i.parentId == 0)
+					.map(menuItem => mapMenuItem(response.data, menuItem)),
+			);
+		});
 	};
 
 	return <div>{showNavbar && <Menubar model={menu} />}</div>;

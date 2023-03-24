@@ -16,6 +16,7 @@ import {NAVBAR_TYPES} from "../../../enviroment";
 import {useOverlay} from "../../contexts/OverlayContext";
 import {GroupTreeContentService} from "../../../features/groupTreeContent/services/groupTreeContentService";
 
+//TODO: Search menu items
 export default function Navbar() {
 	const authContext = useContext(AuthContext);
 	const overlayContext = useOverlay();

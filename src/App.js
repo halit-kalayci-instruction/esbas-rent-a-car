@@ -21,10 +21,33 @@ import { useContext, useEffect } from 'react';
 import Modal from './shared/components/modal/Modal';
 import DataTableFilter from './shared/components/data-table-filter/DataTableFilter';
 //react-router-dom
+import { locale, addLocale, updateLocaleOption, updateLocaleOptions, localeOption, localeOptions } from 'primereact/api';
 
 // createContext, useContext
 function App() {
   const overlayContext = useOverlay();
+  useEffect(() => {
+    addLocale('tr', {
+      clear: 'Temizle',
+      filter: 'Filtre',
+      noFilter: "Filtresiz",
+      notEquals: "Eşit olmayan",
+      equals: "Eşit",
+      endsWith: "İle Biten",
+      notContains: "İçermeyen",
+      contains: "İçeren",
+      startsWith: "İle Başlayan",
+      lt: "Daha Az",
+      lte: "Daha Az veya Eşit",
+      gt: "Daha Çok",
+      gte: "Daha Çok veya Eşit",
+      dateIs: "Tarihinde",
+      dateIsNot: "Tarihinde Olmayan",
+      dateBefore: "Tarihinden Önce",
+      dateAfter: "Tarihinden Sonra"
+    });
+    locale("tr")
+  }, [])
   return (
     <div className="App">
       <Modal></Modal>

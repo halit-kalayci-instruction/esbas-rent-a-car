@@ -127,8 +127,6 @@ export default function Navbar() {
 	useEffect(() => {
 		let showNavbar = !hideNavbarRoutes.includes(pathname);
 		setShowNavbar(showNavbar);
-		console.log(authContext);
-		console.log(overlayContext);
 	}, [pathname]);
 
 	useEffect(() => {
@@ -169,8 +167,10 @@ export default function Navbar() {
 	}, [i18n.resolvedLanguage]);
 
 	const getVisibleStatus = item => {
-		if (!item.roles || item.roles.length <= 0) return true;
 		let isAuthenticated = authContext.authInformation.authenticated;
+		if (item.hideOnAuth && isAuthenticated) return false;
+		if (!item.roles || item.roles.length <= 0)
+			return !item.showOnAuth || isAuthenticated;
 		if (!isAuthenticated) return false;
 		return authContext.hasPermission(item.roles);
 	};
@@ -187,6 +187,7 @@ export default function Navbar() {
 			icon: menuItem.imgUrl,
 			visible: getVisibleStatus(menuItem),
 			items: allMenu
+				.sort((a, b) => a.rowOrder - b.rowOrder)
 				.filter(i => i.parentId == menuItem.id)
 				.map(subItem => {
 					return mapMenuItem(allMenu, subItem);
@@ -204,6 +205,7 @@ export default function Navbar() {
 			console.log(response.data);
 			setMenu(
 				response.data
+					.sort((a, b) => a.rowOrder - b.rowOrder)
 					.filter(i => i.parentId == 0)
 					.map(menuItem => mapMenuItem(response.data, menuItem)),
 			);

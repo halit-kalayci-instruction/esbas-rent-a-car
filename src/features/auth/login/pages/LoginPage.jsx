@@ -5,7 +5,6 @@ import {Button} from "primereact/button";
 import * as Yup from "yup";
 import {Card} from "primereact/card";
 import {Link, useNavigate} from "react-router-dom";
-import LoginService from "../services/loginService";
 import {setItem} from "../../../../core/utils/localStorage";
 import BaseInput from "../../../../shared/components/form-elements/base-input/BaseInput";
 import {useDispatch} from "react-redux";
@@ -13,6 +12,7 @@ import jwt_decode from "jwt-decode";
 import {Login} from "../../../../store/actions/authActions";
 import {AuthContext} from "../../../../shared/contexts/AuthContext";
 import {ROLES} from "../../../../shared/constants/claimConstants";
+import AuthService from "../../services/authService";
 export default function LoginPage() {
 	// initial values => {email:'', password:''}
 	// validation schema => yup validation schema
@@ -30,7 +30,7 @@ export default function LoginPage() {
 			.min(3, "Şifre minimum 3 haneli olmalıdır."),
 	});
 	const onFormSubmit = values => {
-		let loginService = new LoginService();
+		let loginService = new AuthService();
 		loginService.login(values).then(response => {
 			setItem("token", response.data.accessToken.token);
 			let userInfo = jwt_decode(response.data.accessToken.token);

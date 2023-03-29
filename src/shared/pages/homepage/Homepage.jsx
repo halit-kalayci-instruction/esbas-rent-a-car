@@ -149,6 +149,7 @@ export default function Homepage() {
 				))}
 			</div>
 			<Pagination
+				pageSizes={[1, 2, 3]}
 				hasPrevious={data.hasPrevious}
 				hasNext={data.hasNext}
 				pages={data.pages}

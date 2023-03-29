@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 
 export default function Pagination(props) {
 	const {t} = useTranslation();
-	//TODO: Dynamic Page Size Options
+	const {pageSizes = [1, 10, 50]} = props;
 	return (
 		<div className="row">
 			<div className="col-3">
@@ -60,9 +60,9 @@ export default function Pagination(props) {
 					}}
 					className="form-select"
 				>
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
+					{pageSizes.map(pageSize => (
+						<option value={pageSize}> {pageSize}</option>
+					))}
 				</select>
 			</div>
 		</div>

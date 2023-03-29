@@ -21,6 +21,7 @@ export const AuthProvider = (props) => {
             let userInfo = jwt_decode(token);
             let expired = Date.now() >= userInfo.exp * 1000;
             if (!expired) {
+                // Refresh-token
                 return { authenticated: true, user: userInfo, roles: userInfo[ROLES] }
             }
         }

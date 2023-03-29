@@ -355,10 +355,6 @@ export default function DataTableFilter() {
 	// constraints ve value yönetimi
 	// global alanını handle et
 
-	const translateMatchMode = mode => {
-		//TODO
-	};
-
 	const onFilter = filterObject => {
 		let filter = translateFilterToBackend(filterObject);
 		console.log(filter);

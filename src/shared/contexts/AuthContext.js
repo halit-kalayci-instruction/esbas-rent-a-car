@@ -1,17 +1,31 @@
 import { createContext, useState } from "react";
+import { getItem } from "../../core/utils/localStorage";
+import jwt_decode from "jwt-decode";
+import { ROLES } from "../constants/claimConstants";
+
 
 export const AuthContext = createContext();
 
 // export const useAuth = () => {
 //     return useContext(AuthContext);
 // }
-
-//TODO: Local storageda süresi geçmemiş bir token var ise bunu incele ve kullanıcıyı buna göre al.
-
 // React Component
 //!: React Hooks & Export Function
 export const AuthProvider = (props) => {
-    const [authInformation, setAuthInformation] = useState({ authenticated: false, user: null, roles: [] })
+
+    const getInitialUser = () => {
+        let token = getItem("token");
+        if (token) {
+            let userInfo = jwt_decode(token);
+            let expired = Date.now() >= userInfo.exp * 1000;
+            if (!expired) {
+                return { authenticated: true, user: userInfo, roles: userInfo[ROLES] }
+            }
+        }
+        return { authenticated: false, user: null, roles: [] }
+    }
+
+    const [authInformation, setAuthInformation] = useState(getInitialUser())
 
     const hasPermission = (roles) => {
         if (authInformation.authenticated == false) return false;

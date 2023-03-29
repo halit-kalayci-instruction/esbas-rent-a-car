@@ -12,7 +12,7 @@ export default function CarCard(props) {
 	}, []);
 
 	//TODO: Add carousel.
-	const header = props.car.images.length > 0 && (
+	const header = props.car?.images?.length > 0 && (
 		<img alt="Card" src={BASE_CDN_URL + props.car.images[0].path} />
 	);
 	const footer = (

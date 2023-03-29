@@ -12,54 +12,51 @@ import BaseSelect from "../../components/form-elements/base-select/BaseSelect";
 
 import {Button} from "primereact/button";
 
-//TODO: Marka ve modelleri fetch edip filtreleme formuna gönder.
 export default function Homepage() {
 	// Redux
 	const authContext = useContext(AuthContext);
 	const [data, setData] = useState({});
+	const [brandData, setBrandData] = useState({});
 	const [pageSize, setpageSize] = useState(1);
 	const dispatch = useDispatch();
 	const i = 0;
 
 	// { modelId:6, minKilometer:500, maxModelYear:2021 }
 
-	const testDynamic = () => {
+	const translateDynamic = object => {
 		// {field:"modelId", operator:"eq", value:"6"}
 		// {field:"kilometer",operator:"gt",value:100}
 		// {field:"kilometer",operator:"lt",value:600}
-		let object = {
-			modelId: {fieldName: "ModelId", operator: "eq", value: "6"},
-			MinKilometer: {fieldName: "Kilometer", operator: "gt", value: "500"},
-			MaxKilometer: {fieldName: "Kilometer", operator: "lt", value: "5000"},
-			ModelYear: {fieldName: "ModelYear", operator: "eq", value: "3000"},
-		};
 
 		let obj2 = {
-			field: "modelId",
-			value: object.modelId.value,
+			field: "Model.Brand.Id",
+			value: object.Model.Brand.Id,
 			operator: "eq",
 			logic: "and",
 			filters: [],
 		};
 
-		for (const [key, value] of Object.entries(object)) {
-			// obj2 = {...obj2, filters: [...filters, {}]};
+		let filtersToUse = {...object, Model: undefined};
+
+		for (const [key, value] of Object.entries(filtersToUse)) {
+			if (!value || value == "" || value < 0) continue;
 			obj2.filters.push({
-				field: value.fieldName,
-				value: value.value,
-				operator: value.operator,
+				field: key,
+				value: value,
+				operator: "eq",
 			});
 		}
 		console.log(obj2);
+		return obj2;
 	};
 
 	useEffect(() => {
-		testDynamic();
-	}, []);
+		console.log(brandData);
+	}, brandData);
 
 	useEffect(() => {
 		fetchCarData();
-		//fetchBrandData();
+		fetchBrandData();
 	}, [pageSize]);
 	// Circular Hook Call
 
@@ -75,7 +72,8 @@ export default function Homepage() {
 	const fetchBrandData = () => {
 		let brandService = new BrandService();
 		brandService.getAll().then(response => {
-			console.log("brandservice");
+			setBrandData(response.data);
+			console.log(response.data);
 		});
 	};
 
@@ -99,36 +97,30 @@ export default function Homepage() {
 							maxKilometer: undefined,
 						}}
 						onSubmit={formValues => {
-							let obj = {
-								field: "ModelYear",
-								operator: "eq",
-								value: formValues.modelYear,
-								logic: "and",
-								filters: [
-									{
-										field: "Kilometer",
-										operator: "gt",
-										value: formValues.minKilometer,
-									},
-									{
-										field: "Kilometer",
-										operator: "lt",
-										value: formValues.maxKilometer,
-									},
-								],
-							};
-							console.log(obj);
+							let obj = translateDynamic(formValues);
 							let carService = new CarService();
 							carService
 								.getAllDynamic({page: 0, pageSize: 20}, {filter: obj})
-								.then(response => console.log(response));
+								.then(response => {
+									console.log(response);
+									setData(response.data);
+								});
 						}}
 					>
 						<Form>
 							<div className="row">
-								{/* <div className="col-2">
-									<BaseSelect label="Model" name="modelId" data></BaseSelect>
-								</div> */}
+								<div className="col-2">
+									{brandData && (
+										<BaseSelect
+											label="Marka"
+											name="Model.Brand.Id"
+											data={brandData.items}
+											nameKeys={["name"]}
+											valueKey="id"
+											nameDivider=""
+										></BaseSelect>
+									)}
+								</div>
 								<div className="col-2">
 									<BaseInput label="Model Yılı" name="modelYear"></BaseInput>
 								</div>

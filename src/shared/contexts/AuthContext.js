@@ -15,6 +15,8 @@ export const AuthProvider = (props) => {
 
     const getInitialUser = () => {
         let token = getItem("token");
+        // let remember = getItem("rememberMe")
+        // if(!remember)  return { authenticated: false, user: null, roles: [] };
         if (token) {
             let userInfo = jwt_decode(token);
             let expired = Date.now() >= userInfo.exp * 1000;

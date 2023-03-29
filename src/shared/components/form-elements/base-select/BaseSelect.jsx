@@ -28,7 +28,7 @@ function BaseSelect(props) {
 				</option>
 				{props.data?.map((opt, index) => (
 					<option value={opt[props.valueKey]}>
-						{props.nameKeys.map(key => {
+						{props.nameKeys?.map(key => {
 							return opt[key] + props.nameDivider;
 						})}
 					</option>

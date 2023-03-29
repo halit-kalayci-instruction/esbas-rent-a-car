@@ -1,9 +1,8 @@
 import axios from "axios";
 import { BASE_API_URL } from "../../enviroment";
 import { getItem } from "./localStorage";
-import { AUTH_EXCEPTION, BUSINESS_EXCEPTION, VALIDATION_EXCEPTION } from "../enums/exceptionTypes";
-import { handleAuthException, handleBusinessException, handleDefaultException, handleValidationException } from "./exceptionHandlers";
-
+import { AUTH_EXCEPTION, BUSINESS_EXCEPTION, INTERNAL_EXCEPTION, VALIDATION_EXCEPTION } from "../enums/exceptionTypes";
+import { handleAuthException, handleBusinessException, handleDefaultException, handleValidationException, handleUnknownException } from "./exceptionHandlers";
 
 const instance = axios.create({
     baseURL: BASE_API_URL
@@ -27,9 +26,12 @@ instance.interceptors.response.use((response) => {
         case AUTH_EXCEPTION:
             handleAuthException();
             break;
-        default:
-            // Yukarıdaki hata türlerinin hiç birine rastlanmadığına
+        case INTERNAL_EXCEPTION:
             handleDefaultException(error.response.data);
+        // case "ERROR_TYPE_3":
+        //     toastr.error(error.response.data.Detail)
+        default:
+            handleUnknownException(error);
             break;
     }
     return Promise.reject(error);

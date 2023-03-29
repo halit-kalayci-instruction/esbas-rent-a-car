@@ -34,6 +34,10 @@ export const refreshToken = () => {
 }
 
 export const handleDefaultException = (error) => {
-    //TODO: Backend ile bir örneklem oluştur.
     toastr.error(error.Detail);
+}
+
+// Bilinmedik (frontendde ele alınmayan) hata türleri
+export const handleUnknownException = (error) => {
+    toastr.error("Bilinmedik hata");
 }

@@ -11,6 +11,7 @@ import BaseInput from "../../components/form-elements/base-input/BaseInput";
 import BaseSelect from "../../components/form-elements/base-select/BaseSelect";
 
 import {Button} from "primereact/button";
+import instance from "../../../core/utils/axiosInterceptors";
 
 export default function Homepage() {
 	// Redux
@@ -57,6 +58,7 @@ export default function Homepage() {
 	useEffect(() => {
 		fetchCarData();
 		fetchBrandData();
+		instance.post("GroupTreeContents").then(response => console.log(response));
 	}, [pageSize]);
 	// Circular Hook Call
 

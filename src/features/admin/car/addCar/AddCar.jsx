@@ -10,7 +10,6 @@ import toastr from "toastr";
 import {useNavigate, useParams} from "react-router-dom";
 import BrandService from "../../../brand/services/brandService";
 import {init} from "i18next";
-//TODO: Translate page
 function AddCar(props) {
 	const params = useParams();
 	const [models, setModels] = useState([]);
@@ -80,8 +79,6 @@ function AddCar(props) {
 		});
 	};
 
-	//TODO: Translate
-	//TODO: Globalize
 	const carStates = [
 		{id: 1, label: "Available"},
 		{id: 2, label: "Rented"},
@@ -113,7 +110,6 @@ function AddCar(props) {
 			});
 		}
 	};
-	//TODO: Fix 1 select
 	const FormObserver = () => {
 		// FormikContext
 		const {values, setFieldValue, setFieldTouched, touched} =

@@ -42,14 +42,6 @@ export const handleAuthException = async (error) => {
     return instance(originialRequest);
 }
 
-export const refreshToken = () => {
-    //TODO: coredan taşı
-    let authService = new AuthService();
-    authService.refreshToken().then(response => {
-        setItem("token", response.data.token);
-        //? Re-send request?
-    });
-}
 
 export const handleDefaultException = (error) => {
     toastr.error(error.Detail);

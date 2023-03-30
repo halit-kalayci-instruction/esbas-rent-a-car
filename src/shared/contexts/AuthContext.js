@@ -36,8 +36,11 @@ export const AuthProvider = (props) => {
         return result;
     }
 
+    const refreshUser = () => {
+        setAuthInformation(getInitialUser())
+    }
 
-    return <AuthContext.Provider value={{ authInformation, setAuthInformation }}>
+    return <AuthContext.Provider value={{ authInformation, setAuthInformation, hasPermission, refreshUser }}>
         {props.children}
     </AuthContext.Provider>
 }

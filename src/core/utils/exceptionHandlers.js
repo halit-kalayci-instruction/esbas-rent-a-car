@@ -5,6 +5,7 @@ import AuthService from "../../features/auth/services/authService";
 import instance from "./axiosInterceptors";
 import store from "../../store/configureStore";
 import { ROLES } from "../../shared/constants/claimConstants";
+import { RefreshUser } from "../../store/actions/authActions";
 
 
 export const handleBusinessException = (error) => {
@@ -26,13 +27,14 @@ export const handleAuthException = async (error) => {
     let response = await instance.get('Auth/RefreshToken');
     let token = response.data.token;
     setItem('token', token);
-    let state = store.getState();
-    if (token) {
-        let userInfo = jwt_decode(token);
-        state.auth = { authenticated: true, user: userInfo, roles: userInfo[ROLES] }
-    }
-    else
-        state.auth = { authenticated: false, user: null, roles: [] };
+    // let state = store.getState();
+    // if (token) {
+    //     let userInfo = jwt_decode(token);
+    //     state.auth = { authenticated: true, user: userInfo, roles: userInfo[ROLES] }
+    // }
+    // else
+    //     state.auth = { authenticated: false, user: null, roles: [] };
+    store.dispatch(RefreshUser());
     originialRequest.headers.Authorization = `Bearer ${token}`;
     return instance(originialRequest);
 }

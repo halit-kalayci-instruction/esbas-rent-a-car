@@ -1,4 +1,5 @@
 import { getItem } from "../../core/utils/localStorage";
+import { ROLES } from "../../shared/constants/claimConstants";
 import { REFRESH_USER, USER_LOGIN, USER_LOGOUT } from "../constants/authConstants";
 import { authState } from "../initialValues/authState";
 import jwt_decode from "jwt-decode";

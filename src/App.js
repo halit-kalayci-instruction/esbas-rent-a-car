@@ -22,6 +22,7 @@ import Modal from './shared/components/modal/Modal';
 import DataTableFilter from './shared/components/data-table-filter/DataTableFilter';
 //react-router-dom
 import { locale, addLocale, updateLocaleOption, updateLocaleOptions, localeOption, localeOptions } from 'primereact/api';
+import Subscribers from './shared/components/subscribers/Subscribers';
 
 // createContext, useContext
 function App() {
@@ -50,6 +51,7 @@ function App() {
   }, [])
   return (
     <div className="App">
+      <Subscribers />
       <Modal></Modal>
       {overlayContext.show && <div className='overlay'></div>}
       <Loader />

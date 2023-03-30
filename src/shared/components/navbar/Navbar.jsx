@@ -132,7 +132,7 @@ export default function Navbar() {
 
 	useEffect(() => {
 		fetchMenuItems();
-	}, [authState]);
+	}, [authContext]);
 
 	useEffect(() => {
 		if (menu.length > 0 && menu.find(m => m.translator == true) == null) {
@@ -168,7 +168,7 @@ export default function Navbar() {
 	}, [i18n.resolvedLanguage]);
 
 	const getVisibleStatus = item => {
-		let isAuthenticated = authState.authenticated;
+		let isAuthenticated = authContext.authInformation.authenticated;
 		if (item.hideOnAuth && isAuthenticated) return false;
 		if (!item.roles || item.roles.length <= 0)
 			return !item.showOnAuth || isAuthenticated;

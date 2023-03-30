@@ -1,11 +1,12 @@
 import toastr from "toastr";
-import { getItem, setItem } from "./localStorage";
-import jwt_decode from "jwt-decode"
 import AuthService from "../../features/auth/services/authService";
 import instance from "./axiosInterceptors";
 import store from "../../store/configureStore";
-import { ROLES } from "../../shared/constants/claimConstants";
 import { RefreshUser } from "../../store/actions/authActions";
+import { setItem } from "./localStorage";
+
+// Subscriber
+
 
 
 export const handleBusinessException = (error) => {
@@ -35,6 +36,8 @@ export const handleAuthException = async (error) => {
     // else
     //     state.auth = { authenticated: false, user: null, roles: [] };
     store.dispatch(RefreshUser());
+    window.dispatchEvent(new Event('changeValue'))
+    window.dispatchEvent(new Event('storage'))
     originialRequest.headers.Authorization = `Bearer ${token}`;
     return instance(originialRequest);
 }

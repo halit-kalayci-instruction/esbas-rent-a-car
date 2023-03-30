@@ -2,6 +2,11 @@ import toastr from "toastr";
 import { getItem, setItem } from "./localStorage";
 import jwt_decode from "jwt-decode"
 import AuthService from "../../features/auth/services/authService";
+import instance from "./axiosInterceptors";
+import store from "../../store/configureStore";
+import { ROLES } from "../../shared/constants/claimConstants";
+
+
 export const handleBusinessException = (error) => {
     toastr.error(error.Detail);
 }
@@ -10,18 +15,26 @@ export const handleValidationException = (error) => {
         toastr.error(fail.ErrorMessage);
     })
 }
-export const handleAuthException = () => {
+export const handleAuthException = async (error) => {
     // Bu hatayı neden aldım?
     // token var, süresi geçmemiş => rol yetersiz
-    let token = getItem("token");
-    let userInfo = jwt_decode(token);
-    let expired = Date.now() >= userInfo.exp * 1000;
-    if (!token || expired) {
-        // refresh-token
-        refreshToken();
-        return;
+    // Requestin kopyasının tutularak retry yapılması
+    const originialRequest = error.config;
+    originialRequest._retry = true;
+    //return axios(originialRequest);
+    // async-await
+    let response = await instance.get('Auth/RefreshToken');
+    let token = response.data.token;
+    setItem('token', token);
+    let state = store.getState();
+    if (token) {
+        let userInfo = jwt_decode(token);
+        state.auth = { authenticated: true, user: userInfo, roles: userInfo[ROLES] }
     }
-    toastr.error("Bu işlemi yapmaya yetkiniz bulunmamaktadır.")
+    else
+        state.auth = { authenticated: false, user: null, roles: [] };
+    originialRequest.headers.Authorization = `Bearer ${token}`;
+    return instance(originialRequest);
 }
 
 export const refreshToken = () => {

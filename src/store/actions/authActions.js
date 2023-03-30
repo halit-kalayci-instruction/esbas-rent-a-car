@@ -1,4 +1,4 @@
-import { USER_LOGIN, USER_LOGOUT } from "../constants/authConstants";
+import { REFRESH_USER, USER_LOGIN, USER_LOGOUT } from "../constants/authConstants";
 
 export function Login(user) {
     return {
@@ -10,6 +10,12 @@ export function Login(user) {
 export function Logout() {
     return {
         type: USER_LOGOUT,
+        payload: {}
+    }
+}
+export function RefreshUser() {
+    return {
+        type: REFRESH_USER,
         payload: {}
     }
 }

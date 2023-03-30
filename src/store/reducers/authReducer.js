@@ -1,5 +1,7 @@
-import { USER_LOGIN, USER_LOGOUT } from "../constants/authConstants";
+import { getItem } from "../../core/utils/localStorage";
+import { REFRESH_USER, USER_LOGIN, USER_LOGOUT } from "../constants/authConstants";
 import { authState } from "../initialValues/authState";
+import jwt_decode from "jwt-decode";
 
 
 export default function authReducer(state = authState, { type, payload }) {
@@ -16,6 +18,15 @@ export default function authReducer(state = authState, { type, payload }) {
             return { authenticated: true, user: payload }
         case USER_LOGOUT:
             return authState;
+        case REFRESH_USER:
+            let token = getItem("token");
+            // let remember = getItem("rememberMe")
+            // if(!remember)  return { authenticated: false, user: null, roles: [] };
+            if (token) {
+                let userInfo = jwt_decode(token);
+                return { authenticated: true, user: userInfo, roles: userInfo[ROLES] }
+            }
+            return { authenticated: false, user: null, roles: [] }
         default:
             return state;
     }

@@ -58,7 +58,6 @@ export default function Homepage() {
 	useEffect(() => {
 		fetchCarData();
 		fetchBrandData();
-		instance.post("GroupTreeContents").then(response => console.log(response));
 	}, [pageSize]);
 	// Circular Hook Call
 

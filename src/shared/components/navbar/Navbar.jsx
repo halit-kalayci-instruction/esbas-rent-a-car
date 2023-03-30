@@ -22,7 +22,7 @@ export default function Navbar() {
 	const overlayContext = useOverlay();
 	const dispatch = useDispatch();
 	const {t, i18n} = useTranslation();
-
+	const authState = useSelector(i => i.auth);
 	// const menuItems = [
 	// 	{
 	// 		label: t("Homepage"),
@@ -132,7 +132,7 @@ export default function Navbar() {
 
 	useEffect(() => {
 		fetchMenuItems();
-	}, [authContext]);
+	}, [authState]);
 
 	useEffect(() => {
 		if (menu.length > 0 && menu.find(m => m.translator == true) == null) {
@@ -168,12 +168,12 @@ export default function Navbar() {
 	}, [i18n.resolvedLanguage]);
 
 	const getVisibleStatus = item => {
-		let isAuthenticated = authContext.authInformation.authenticated;
+		let isAuthenticated = authState.authenticated;
 		if (item.hideOnAuth && isAuthenticated) return false;
 		if (!item.roles || item.roles.length <= 0)
 			return !item.showOnAuth || isAuthenticated;
 		if (!isAuthenticated) return false;
-		return authContext.hasPermission(item.roles);
+		return userHasRole(item.roles);
 	};
 
 	const mapMenuItem = (allMenu, menuItem) => {

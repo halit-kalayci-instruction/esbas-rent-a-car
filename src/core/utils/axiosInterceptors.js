@@ -16,7 +16,7 @@ instance.interceptors.request.use((config) => {
 
 instance.interceptors.response.use((response) => {
     return response;
-}, (error) => {
+}, async (error) => {
     switch (error.response.data.Type) {
         case BUSINESS_EXCEPTION:
             handleBusinessException(error.response.data)
@@ -25,16 +25,8 @@ instance.interceptors.response.use((response) => {
             handleValidationException(error.response.data);
             break;
         case AUTH_EXCEPTION:
-            // Requestin kopyasının tutularak retry yapılması
-            const originialRequest = error.config;
-            //return axios(originialRequest);
-            instance.get('Auth/RefreshToken').then(response => {
-                let token = response.data.token;
-                setItem('token', token);
-                originialRequest.headers.Authorization = `Bearer ${token}`;
-                return axios(originialRequest);
-            });
-            handleAuthException();
+            let result = await handleAuthException(error);
+            return result;
             break;
         case INTERNAL_EXCEPTION:
             handleDefaultException(error.response.data);

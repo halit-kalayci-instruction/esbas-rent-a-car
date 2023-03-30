@@ -19,14 +19,12 @@ export const AuthProvider = (props) => {
         // if(!remember)  return { authenticated: false, user: null, roles: [] };
         if (token) {
             let userInfo = jwt_decode(token);
-            let expired = Date.now() >= userInfo.exp * 1000;
-            if (!expired) {
-                // Refresh-token
-                return { authenticated: true, user: userInfo, roles: userInfo[ROLES] }
-            }
+            return { authenticated: true, user: userInfo, roles: userInfo[ROLES] }
         }
         return { authenticated: false, user: null, roles: [] }
     }
+
+
 
     const [authInformation, setAuthInformation] = useState(getInitialUser())
 
@@ -38,7 +36,8 @@ export const AuthProvider = (props) => {
         return result;
     }
 
-    return <AuthContext.Provider value={{ authInformation, setAuthInformation, hasPermission }}>
+
+    return <AuthContext.Provider value={{ authInformation, setAuthInformation }}>
         {props.children}
     </AuthContext.Provider>
 }

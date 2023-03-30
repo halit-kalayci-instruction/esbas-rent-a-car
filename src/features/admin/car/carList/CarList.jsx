@@ -94,7 +94,7 @@ function CarList() {
 					severity="warning"
 				></Button>
 				<Button
-					disabled={!authContext.hasPermission(["Cars.Delete"])}
+					disabled={userHasRole(["Cars.Delete"])}
 					onClick={() => deleteCar(car)}
 					className="mx-2"
 					label="Sil"

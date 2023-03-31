@@ -15,8 +15,11 @@ import {Tag} from "primereact/tag";
 import {TriStateCheckbox} from "primereact/tristatecheckbox";
 import {CustomerService} from "./CustomerService";
 import {translateFilterToBackend} from "../../../core/utils/dataTableExtensions";
+import {useHead} from "../../contexts/HeadContext";
 
 export default function DataTableFilter() {
+	const head = useHead();
+	head.setTitle("Data Table");
 	const [customers, setCustomers] = useState(null);
 	const [filters, setFilters] = useState(null);
 	const [loading, setLoading] = useState(false);

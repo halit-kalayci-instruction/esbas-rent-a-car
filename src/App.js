@@ -23,6 +23,7 @@ import DataTableFilter from './shared/components/data-table-filter/DataTableFilt
 //react-router-dom
 import { locale, addLocale, updateLocaleOption, updateLocaleOptions, localeOption, localeOptions } from 'primereact/api';
 import Subscribers from './shared/components/subscribers/Subscribers';
+import Head from './shared/components/head/Head';
 
 // createContext, useContext
 function App() {
@@ -51,6 +52,7 @@ function App() {
   }, [])
   return (
     <div className="App">
+      <Head></Head>
       <Subscribers />
       <Modal></Modal>
       {overlayContext.show && <div className='overlay'></div>}
@@ -58,15 +60,24 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="" element={<Homepage />} />
+
+        <Route path="*" element={<>404 not found</>} />
+
+
         <Route path="data" element={<DataTableFilter />} />
+
         <Route path="homepage" element={<Homepage />} />
+
         <Route path="login" element={<LoginPage />} />
+
         <Route path="car/add" element={<AddCar />} />
+
         <Route path="car/update/:id"
           element={
             <ProtectedRoute roles={["Cars.Update"]}>
               <AddCar />
             </ProtectedRoute>} />
+
         <Route path="brand/list"
           element={
             <ProtectedRoute roles={["Admin", "Brands.Create", "Brands.Update", "Brands.Delete"]}>

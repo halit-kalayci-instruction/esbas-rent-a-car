@@ -1,9 +1,9 @@
 // Tüm yapıyı configure edip react tarafından kullanıma hazır hale getirmek..
-import { createStore, compose, applyMiddleware } from 'redux';
+import { compose, applyMiddleware } from 'redux';
+import { configureStore } from "@reduxjs/toolkit"
 import rootReducer from './rootReducer';
 import thunk from 'redux-thunk';
 
-//TODO: use not deprecated function.
 
 const middlewares = [thunk];
 
@@ -15,8 +15,8 @@ const composeEnhancers =
 
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
-const store = createStore(rootReducer, enhancer);
-export function configureStore() {
+const store = configureStore({ reducer: rootReducer, enhancer });
+export function getStore() {
     // 1 instance
     return store;
 }

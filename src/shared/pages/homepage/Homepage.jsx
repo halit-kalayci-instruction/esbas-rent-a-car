@@ -12,16 +12,21 @@ import BaseSelect from "../../components/form-elements/base-select/BaseSelect";
 
 import {Button} from "primereact/button";
 import instance from "../../../core/utils/axiosInterceptors";
+import {Helmet} from "react-helmet";
+import {useHead} from "../../contexts/HeadContext";
 
 export default function Homepage() {
 	// Redux
 	const authContext = useContext(AuthContext);
+	const head = useHead();
 	const [data, setData] = useState({});
 	const [brandData, setBrandData] = useState({});
 	const [pageSize, setpageSize] = useState(1);
 	const dispatch = useDispatch();
+	const [loading, setLoading] = useState(true);
 	const i = 0;
 
+	head.setTitle("Ana Sayfa");
 	// { modelId:6, minKilometer:500, maxModelYear:2021 }
 
 	const translateDynamic = object => {
@@ -59,6 +64,10 @@ export default function Homepage() {
 		fetchCarData();
 		fetchBrandData();
 	}, [pageSize]);
+
+	useEffect(() => {
+		timeoutLoader();
+	});
 	// Circular Hook Call
 
 	// <a1235>
@@ -86,7 +95,16 @@ export default function Homepage() {
 		setpageSize(+pageSize);
 	};
 
-	return (
+	const timeoutLoader = () => {
+		// Sayfa initlerinde
+		setTimeout(() => {
+			setLoading(false);
+		}, 3000);
+	};
+
+	return loading ? (
+		<div>Loading</div>
+	) : (
 		<div className="container">
 			<div className="row mt-3">
 				<div className="col-12 mb-2">

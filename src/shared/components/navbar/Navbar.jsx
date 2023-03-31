@@ -25,6 +25,7 @@ export default function Navbar() {
 	const authState = useSelector(i => i.auth);
 	const [menu, setMenu] = useState([]);
 	const [filteredMenu, setFilteredMenu] = useState([]);
+	const [filtered, setFiltered] = useState(false);
 	let filteredMenuItems = [];
 
 	const handleLogout = () => {
@@ -131,7 +132,10 @@ export default function Navbar() {
 	};
 
 	const searchMenu = searchKey => {
-		if (searchKey.length < 3) return;
+		if (searchKey.length < 3) {
+			setFiltered(false);
+			return;
+		}
 		filteredMenuItems = [];
 		let filteredItems = menu.filter(i => filterMenu(i, searchKey));
 		filteredMenuItems.forEach(item => {
@@ -144,7 +148,8 @@ export default function Navbar() {
 					filteredMenuItems.push(parentMenu);
 			}
 		});
-		setMenu(filteredMenuItems);
+		setFilteredMenu(filteredMenuItems.filter(i => i.parentId == 0));
+		setFiltered(true);
 	};
 
 	const filterMenu = (menuItem, searchKey) => {
@@ -178,6 +183,10 @@ export default function Navbar() {
 	};
 
 	return (
-		<div>{showNavbar && <Menubar end={searchTemplate} model={menu} />}</div>
+		<div>
+			{showNavbar && (
+				<Menubar end={searchTemplate} model={filtered ? filteredMenu : menu} />
+			)}
+		</div>
 	);
 }

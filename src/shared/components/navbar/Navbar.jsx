@@ -133,6 +133,7 @@ export default function Navbar() {
 	const searchMenu = searchKey => {
 		if (searchKey.length < 3) return;
 		filteredMenuItems = [];
+		let filteredItems = menu.filter(i => filterMenu(i, searchKey));
 		filteredMenuItems.forEach(item => {
 			if (item.parentId != 0) {
 				let parentMenu = menu.find(i => i.id == item.parentId);

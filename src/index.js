@@ -11,7 +11,7 @@ import { AuthProvider } from './shared/contexts/AuthContext';
 import { LoaderProvider } from './shared/contexts/LoaderContext';
 import { OverlayProvider } from './shared/contexts/OverlayContext';
 
-// TODO: App component dışındakileri farklı dosyada handle et.
+
 const store = configureStore();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

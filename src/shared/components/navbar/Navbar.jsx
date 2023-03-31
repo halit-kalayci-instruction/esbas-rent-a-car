@@ -15,7 +15,7 @@ import {userHasRole} from "../../utils/auth-status/AuthStatus";
 import {NAVBAR_TYPES} from "../../../enviroment";
 import {useOverlay} from "../../contexts/OverlayContext";
 import {GroupTreeContentService} from "../../../features/groupTreeContent/services/groupTreeContentService";
-
+import {InputText} from "primereact/inputtext";
 //TODO: Search menu items
 export default function Navbar() {
 	const authContext = useContext(AuthContext);
@@ -23,94 +23,9 @@ export default function Navbar() {
 	const dispatch = useDispatch();
 	const {t, i18n} = useTranslation();
 	const authState = useSelector(i => i.auth);
-	// const menuItems = [
-	// 	{
-	// 		label: t("Homepage"),
-	// 		icon: "pi pi-home",
-	// 		command: () => {
-	// 			navigate("/homepage");
-	// 		},
-	// 	},
-	// 	{
-	// 		label: t("login"),
-	// 		icon: "pi pi-sign-in",
-	// 		visible: !authContext.authInformation.authenticated,
-	// 		command: () => {
-	// 			navigate("/login");
-	// 		},
-	// 	},
-	// 	{
-	// 		label: t("register"),
-	// 		icon: "pi pi-user-plus",
-	// 		visible: !authContext.authInformation.authenticated,
-	// 		command: () => {},
-	// 	},
-	// 	{
-	// 		label: t("admin.dashboard"),
-	// 		icon: "pi pi-shield",
-	// 		visible: userHasRole(["Admin", "Cars.Create", "Cars.Update"]),
-	// 		items: [
-	// 			{
-	// 				label: t("car.panel"),
-	// 				visible: userHasRole([
-	// 					"Admin",
-	// 					"Cars.Create",
-	// 					"Cars.Update",
-	// 					"Cars.Delete",
-	// 				]),
-	// 				icon: "pi pi-car",
-	// 				command: () => {
-	// 					navigate("/car/list");
-	// 				},
-	// 			},
-	// {
-	// 	label: t("brand.panel"),
-	// 	visible: userHasRole([
-	// 		"Admin",
-	// 		"Brands.Create",
-	// 		"Brands.Update",
-	// 		"Brands.Delete",
-	// 	]),
-	// 	icon: "pi pi-bookmark",
-	// 	command: () => {
-	// 		navigate("/brand/list");
-	// 	},
-	// },
-	// 		],
-	// 	},
-	// 	{
-	// 		label: t("logout"),
-	// 		icon: "pi pi-user-minus",
-	// 		visible: authContext.authInformation.authenticated,
-	// 		command: () => {
-	// 			// localstorage temizlemek
-	// 			// reduxdaki state'i düzenlemek
-	// 			// login page redirect UX
-	// 			handleLogout();
-	// 		},
-	// 	},
-	// {
-	// 	label: i18n.resolvedLanguage == "en" ? "English" : "Türkçe",
-	// 	icon: "pi pi-language",
-	// 	items: [
-	// 		{
-	// 			label: "Türkçe",
-	// 			icon: "",
-	// 			command: () => {
-	// 				i18n.changeLanguage("tr");
-	// 			},
-	// 		},
-	// 		{
-	// 			label: "English",
-	// 			icon: "",
-	// 			command: () => {
-	// 				i18n.changeLanguage("en");
-	// 			},
-	// 		},
-	// 	],
-	// },
-	// ];
 	const [menu, setMenu] = useState([]);
+	const [filteredMenu, setFilteredMenu] = useState([]);
+	let filteredMenuItems = [];
 
 	const handleLogout = () => {
 		removeItem("token");
@@ -178,6 +93,8 @@ export default function Navbar() {
 
 	const mapMenuItem = (allMenu, menuItem) => {
 		let newMenuItem = {
+			id: menuItem.id,
+			parentId: menuItem.parentId,
 			label: t(menuItem.title),
 			command: () => {
 				if (menuItem.type == NAVBAR_TYPES.URL) navigate(menuItem.target);
@@ -213,5 +130,53 @@ export default function Navbar() {
 		});
 	};
 
-	return <div>{showNavbar && <Menubar model={menu} />}</div>;
+	const searchMenu = searchKey => {
+		if (searchKey.length < 3) return;
+		filteredMenuItems = [];
+		filteredMenuItems.forEach(item => {
+			if (item.parentId != 0) {
+				let parentMenu = menu.find(i => i.id == item.parentId);
+				if (
+					parentMenu &&
+					filteredMenuItems.find(i => i.id == parentMenu.id) == null
+				)
+					filteredMenuItems.push(parentMenu);
+			}
+		});
+		setMenu(filteredMenuItems);
+	};
+
+	const filterMenu = (menuItem, searchKey) => {
+		searchKey = searchKey.toLowerCase();
+		let hasAnyItem = false;
+		menuItem.items?.forEach(item => {
+			hasAnyItem = filterMenu(item, searchKey);
+		});
+		let canSee =
+			menuItem.label.toLowerCase().includes(searchKey) ||
+			menuItem.items?.filter(i => i.label.toLowerCase().includes(searchKey))
+				.length > 0 ||
+			hasAnyItem;
+		if (
+			canSee &&
+			filteredMenuItems.filter(i => i.id == menuItem.id).length <= 0
+		) {
+			filteredMenuItems.push(menuItem);
+		}
+		return canSee;
+	};
+
+	const searchTemplate = () => {
+		return (
+			<InputText
+				type="text"
+				placeholder="Search menu items.."
+				onChange={e => searchMenu(e.target.value)}
+			/>
+		);
+	};
+
+	return (
+		<div>{showNavbar && <Menubar end={searchTemplate} model={menu} />}</div>
+	);
 }

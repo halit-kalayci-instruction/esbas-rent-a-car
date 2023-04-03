@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import * as signalR from "@microsoft/signalr";
 import {BASE_API_URL} from "../../enviroment";
+import {getItem} from "../../core/utils/localStorage";
 function Chat() {
 	const [message, setMessage] = useState("");
 	const [messages, setMessages] = useState([]);
@@ -12,7 +13,11 @@ function Chat() {
 		// withAutomaticReconnect => Eğer bağlantı hiç sağlanamamışsa tekrar denenmez.
 		// Eğer tekrar bağlantı sağlanmaya çalışılıyor ise default olarak [0,2000,1000,30000]
 		const newConnection = new signalR.HubConnectionBuilder()
-			.withUrl(`${BASE_API_URL}chathub`)
+			.withUrl(`${BASE_API_URL}chathub`, {
+				headers: {
+					Authorization: `Bearer ${getItem("token")}`,
+				},
+			})
 			.withAutomaticReconnect([1000, 1000, 1000, 5000])
 			.build();
 

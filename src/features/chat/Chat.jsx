@@ -4,24 +4,44 @@ import {BASE_API_URL} from "../../enviroment";
 function Chat() {
 	const [message, setMessage] = useState("");
 	const [messages, setMessages] = useState([]);
+	const [chatUsers, setChatUsers] = useState([]);
 	const [signalRState, setsignalRState] = useState("Disconnected");
-	const connection = new signalR.HubConnectionBuilder()
-		.withUrl(`${BASE_API_URL}chathub`)
-		.withAutomaticReconnect([1000, 1000, 1000, 5000])
-		// => Eğer bağlantı hiç sağlanamamışsa tekrar denenmez.
-		// Eğer tekrar bağlantı sağlanmaya çalışılıyor ise default olarak [0,2000,1000,30000]
-		.build();
+	const [connection, setConnection] = useState(null);
 
 	useEffect(() => {
-		startConnection().then(() => {
-			connection.on("ReceiveMessage", message => {
-				setMessages([...messages, message]);
-			});
-		});
+		// withAutomaticReconnect => Eğer bağlantı hiç sağlanamamışsa tekrar denenmez.
+		// Eğer tekrar bağlantı sağlanmaya çalışılıyor ise default olarak [0,2000,1000,30000]
+		const newConnection = new signalR.HubConnectionBuilder()
+			.withUrl(`${BASE_API_URL}chathub`)
+			.withAutomaticReconnect([1000, 1000, 1000, 5000])
+			.build();
+
+		setConnection(newConnection);
 	}, []);
 
+	useEffect(() => {
+		if (
+			connection &&
+			connection.state === signalR.HubConnectionState.Disconnected
+		) {
+			connection
+				.start()
+				.then(() => {
+					console.log("Connected with id:" + connection.connectionId);
+
+					connection.on("ReceiveMessage", message => {
+						setMessages([...messages, message]);
+					});
+
+					connection.on("UserListChanged", list => {
+						setChatUsers(list);
+					});
+				})
+				.catch(error => console.log("Connection Error:", error));
+		}
+	}, [connection]);
+
 	// Bağlantı hiç sağlanmadı, sağlanana kadar retry
-	// TODO: Connection disconnect problem
 	const startConnection = async () => {
 		if (connection.state !== signalR.HubConnectionState.Disconnected) return;
 		try {
@@ -36,7 +56,7 @@ function Chat() {
 	};
 
 	const sendMessage = async () => {
-		await startConnection();
+		// await startConnection();
 		connection
 			.invoke("SendMessageAsync", message)
 			.catch(error => console.log("Mesaj gönderilirken hata oluştu:", error));
@@ -44,7 +64,13 @@ function Chat() {
 	return (
 		<div className="container">
 			<h3>Mesaj Gönder</h3>
-			<h3>Connection State: {signalRState}</h3>
+			<h3>Connection State: {connection?.state}</h3>
+			<h3>Chatteki kişiler:</h3>
+			<ul>
+				{chatUsers.map(user => (
+					<li>{user}</li>
+				))}
+			</ul>
 			<input
 				type="text"
 				name="message"

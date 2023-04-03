@@ -3,6 +3,7 @@ import * as signalR from "@microsoft/signalr";
 import {BASE_API_URL} from "../../enviroment";
 function Chat() {
 	const [message, setMessage] = useState("");
+	const [messages, setMessages] = useState([]);
 	const [signalRState, setsignalRState] = useState("Disconnected");
 	const connection = new signalR.HubConnectionBuilder()
 		.withUrl(`${BASE_API_URL}chathub`)
@@ -12,16 +13,30 @@ function Chat() {
 		.build();
 
 	useEffect(() => {
-		connection.start().then(response => {
-			setsignalRState(connection.state);
+		startConnection().then(() => {
+			connection.on("ReceiveMessage", message => {
+				setMessages([...messages, message]);
+			});
 		});
 	}, []);
 
-	const sendMessage = async () => {
-		if (connection.state !== signalR.HubConnectionState.Connected) {
+	// Bağlantı hiç sağlanmadı, sağlanana kadar retry
+	// TODO: Connection disconnect problem
+	const startConnection = async () => {
+		if (connection.state !== signalR.HubConnectionState.Disconnected) return;
+		try {
 			await connection.start();
 			setsignalRState(connection.state);
+		} catch (e) {
+			console.log("WebSocket'e bağlanılamadı, tekrar deneniyor.");
+			setTimeout(() => {
+				startConnection();
+			}, 2000);
 		}
+	};
+
+	const sendMessage = async () => {
+		await startConnection();
 		connection
 			.invoke("SendMessageAsync", message)
 			.catch(error => console.log("Mesaj gönderilirken hata oluştu:", error));
@@ -36,7 +51,20 @@ function Chat() {
 				onChange={e => setMessage(e.target.value)}
 				value={message}
 			></input>
-			<button onClick={sendMessage}>Gönder</button>
+			<button
+				onClick={() => {
+					sendMessage();
+				}}
+			>
+				Gönder
+			</button>
+
+			<h3>Mesajlar</h3>
+			<ul>
+				{messages.map(message => (
+					<li key={message}>{message}</li>
+				))}
+			</ul>
 		</div>
 	);
 }

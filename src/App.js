@@ -24,6 +24,7 @@ import DataTableFilter from './shared/components/data-table-filter/DataTableFilt
 import { locale, addLocale, updateLocaleOption, updateLocaleOptions, localeOption, localeOptions } from 'primereact/api';
 import Subscribers from './shared/components/subscribers/Subscribers';
 import Head from './shared/components/head/Head';
+import Chat from './features/chat/Chat';
 
 // createContext, useContext
 function App() {
@@ -67,6 +68,8 @@ function App() {
         <Route path="data" element={<DataTableFilter />} />
 
         <Route path="homepage" element={<Homepage />} />
+        <Route path="chat" element={<Chat />} />
+
 
         <Route path="login" element={<LoginPage />} />
 

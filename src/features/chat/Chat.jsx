@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import * as signalR from "@microsoft/signalr";
 import {BASE_API_URL} from "../../enviroment";
 import {getItem} from "../../core/utils/localStorage";
+import toastr from "toastr";
 function Chat() {
 	const [message, setMessage] = useState("");
 	const [messages, setMessages] = useState([]);
@@ -21,6 +22,24 @@ function Chat() {
 			.withAutomaticReconnect([1000, 1000, 1000, 5000])
 			.build();
 
+		newConnection.on("ReceiveMessage", message => {
+			// setMessages(prevMessages => {
+			// 	return [...prevMessages, message];
+			// });
+		});
+
+		newConnection.on("UserListChanged", list => {
+			setChatUsers(list);
+		});
+
+		newConnection.on("NewNotification", notif => {
+			toastr.success(notif);
+		});
+
+		newConnection.on("MessagesChanged", messages => {
+			setMessages(messages);
+		});
+
 		setConnection(newConnection);
 	}, []);
 
@@ -33,16 +52,6 @@ function Chat() {
 				.start()
 				.then(() => {
 					console.log("Connected with id:" + connection.connectionId);
-
-					connection.on("ReceiveMessage", onMessageReceived);
-
-					connection.on("UserListChanged", list => {
-						setChatUsers(list);
-					});
-
-					connection.on("MessagesChanged", messages => {
-						setMessages(messages);
-					});
 				})
 				.catch(error => console.log("Connection Error:", error));
 		}
@@ -51,10 +60,6 @@ function Chat() {
 	useEffect(() => {
 		console.log("Mesajlar değişti:", messages);
 	}, [messages]);
-
-	const onMessageReceived = message => {
-		console.log(message);
-	};
 
 	// Bağlantı hiç sağlanmadı, sağlanana kadar retry
 	const startConnection = async () => {

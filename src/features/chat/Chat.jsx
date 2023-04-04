@@ -14,8 +14,8 @@ function Chat() {
 		// Eğer tekrar bağlantı sağlanmaya çalışılıyor ise default olarak [0,2000,1000,30000]
 		const newConnection = new signalR.HubConnectionBuilder()
 			.withUrl(`${BASE_API_URL}chathub`, {
-				headers: {
-					Authorization: `Bearer ${getItem("token")}`,
+				accessTokenFactory: () => {
+					return getItem("token");
 				},
 			})
 			.withAutomaticReconnect([1000, 1000, 1000, 5000])

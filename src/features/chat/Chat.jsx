@@ -32,10 +32,6 @@ function Chat() {
 			setChatUsers(list);
 		});
 
-		newConnection.on("NewNotification", notif => {
-			toastr.success(notif);
-		});
-
 		newConnection.on("MessagesChanged", messages => {
 			setMessages(messages);
 		});

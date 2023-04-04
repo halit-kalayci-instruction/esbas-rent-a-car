@@ -5,7 +5,7 @@ import {Button} from "primereact/button";
 import * as Yup from "yup";
 import {Card} from "primereact/card";
 import {Link, useNavigate} from "react-router-dom";
-import {setItem} from "../../../../core/utils/localStorage";
+import {getItem, setItem} from "../../../../core/utils/localStorage";
 import BaseInput from "../../../../shared/components/form-elements/base-input/BaseInput";
 import {useDispatch} from "react-redux";
 import jwt_decode from "jwt-decode";
@@ -13,6 +13,9 @@ import {Login} from "../../../../store/actions/authActions";
 import {AuthContext} from "../../../../shared/contexts/AuthContext";
 import {ROLES} from "../../../../shared/constants/claimConstants";
 import AuthService from "../../services/authService";
+import * as signalR from "@microsoft/signalr";
+import {BASE_API_URL} from "../../../../enviroment";
+import toastr from "toastr";
 export default function LoginPage() {
 	// initial values => {email:'', password:''}
 	// validation schema => yup validation schema
@@ -40,6 +43,20 @@ export default function LoginPage() {
 				user: userInfo,
 				roles: userInfo[ROLES],
 			});
+
+			const newConnection = new signalR.HubConnectionBuilder()
+				.withUrl(`${BASE_API_URL}notificationhub`, {
+					accessTokenFactory: () => {
+						return getItem("token");
+					},
+				})
+				.withAutomaticReconnect([1000, 1000, 1000, 5000])
+				.build();
+			newConnection.on("NewNotification", notif => {
+				toastr.success(notif);
+			});
+			newConnection.start();
+
 			navigate("/homepage");
 		});
 	};

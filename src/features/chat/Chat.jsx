@@ -34,17 +34,27 @@ function Chat() {
 				.then(() => {
 					console.log("Connected with id:" + connection.connectionId);
 
-					connection.on("ReceiveMessage", message => {
-						setMessages([...messages, message]);
-					});
+					connection.on("ReceiveMessage", onMessageReceived);
 
 					connection.on("UserListChanged", list => {
 						setChatUsers(list);
+					});
+
+					connection.on("MessagesChanged", messages => {
+						setMessages(messages);
 					});
 				})
 				.catch(error => console.log("Connection Error:", error));
 		}
 	}, [connection]);
+
+	useEffect(() => {
+		console.log("Mesajlar değişti:", messages);
+	}, [messages]);
+
+	const onMessageReceived = message => {
+		console.log(message);
+	};
 
 	// Bağlantı hiç sağlanmadı, sağlanana kadar retry
 	const startConnection = async () => {
@@ -92,8 +102,13 @@ function Chat() {
 
 			<h3>Mesajlar</h3>
 			<ul>
-				{messages.map(message => (
-					<li key={message}>{message}</li>
+				{messages.map(receivedMessage => (
+					<li key={receivedMessage.message}>
+						{receivedMessage.senderId == connection.connectionId
+							? "Siz"
+							: receivedMessage.senderFullName}
+						: {receivedMessage.message}
+					</li>
 				))}
 			</ul>
 		</div>
